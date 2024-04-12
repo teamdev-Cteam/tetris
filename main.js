@@ -21,7 +21,7 @@ class Game {
 
     start(){
         this.isGameOver = false;
-        this.gameInterval = setInterval(() => this.update(), 1000);
+        this.gameInterval = setInterval(() => this.update(), 500);
 
     }
 
@@ -46,8 +46,7 @@ class Game {
 
 
         // 仮にy座標を+1ずつする
-
-        if (this.currentTetromino.y == 18) return;
+        if (!this.field.canMove(this.currentTetromino.x, this.currentTetromino.y, 0, 1, this.currentTetromino)) return;
         this.currentTetromino.y += 1;
 
         this.renderer.clear();
@@ -178,9 +177,9 @@ class Field {
 
     }
 
-    canMove(newTetro = tetro, currX, currY, movementX, movementY) {
-        for (let y = 0; y < tetro.length(); y++) {
-            for (let x = 0; x < tetro[y].length(); x++) {
+    canMove(currX, currY, movementX, movementY, newTetro) {
+        for (let y = 0; y < newTetro.length; y++) {
+            for (let x = 0; x < newTetro[y].length; x++) {
                 if (newTetro[y][x]) {
                     let newX = currX + movementX + x;
                     let newY = currY + movementY + y;
