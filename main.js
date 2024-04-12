@@ -42,10 +42,10 @@ class Game {
 
 
         // canMoveの動作チェック
-        console.log(this.field.canMove(this.currentTetromino.x, this.currentTetromino.y, 0, 1, this.currentTetromino.tetro));
+        console.log(this.checkCanMove(0, 1));
 
         // 仮にy座標を+1ずつする
-        if (!this.field.canMove(this.currentTetromino.x, this.currentTetromino.y, 0, 1, this.currentTetromino.tetro)) {
+        if (!this.checkCanMove(0, 1)) {
             return;
         }
         this.currentTetromino.y += 1;
@@ -58,6 +58,10 @@ class Game {
 
     checkGameOver(){
 
+    }
+
+    checkCanMove(movementX, movementY) {
+        return this.field.canMove(this.currentTetromino.x, this.currentTetromino.y, movementX, movementY, this.currentTetromino.tetro);
     }
 }
 
