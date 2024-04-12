@@ -177,6 +177,19 @@ class Field {
     clearLines() {
 
     }
+
+    canMove(newTetro = tetro, currX, currY, movementX, movementY) {
+        for (let y = 0; y < tetro.length(); y++) {
+            for (let x = 0; x < tetro[y].length(); x++) {
+                if (newTetro[y][x]) {
+                    let newX = currX + movementX + x;
+                    let newY = currY + movementY + y;
+                    if (newY < 0 || newY >= this.rows || newX < 0 || newX >= this.cols || this.grid[newY][newX]) return false;
+                }
+            }
+        }
+        return true;
+    }
 }
 
 class Renderer{
