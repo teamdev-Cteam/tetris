@@ -41,12 +41,13 @@ class Game {
         // もし次移動する場所がブロックまたは床だったら、fieldにテトロを追加
 
 
-
-
-
+        // canMoveの動作チェック
+        console.log(this.field.canMove(this.currentTetromino.x, this.currentTetromino.y, 0, 1, this.currentTetromino.tetro));
 
         // 仮にy座標を+1ずつする
-        if (!this.field.canMove(this.currentTetromino.x, this.currentTetromino.y, 0, 1, this.currentTetromino)) return;
+        if (!this.field.canMove(this.currentTetromino.x, this.currentTetromino.y, 0, 1, this.currentTetromino.tetro)) {
+            return;
+        }
         this.currentTetromino.y += 1;
 
         this.renderer.clear();
