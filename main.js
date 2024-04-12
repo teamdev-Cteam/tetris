@@ -32,16 +32,27 @@ class Game {
             return;
         }
         //ゲームの更新
-        // テトロミノの落下、ラインの消去、ゲームオーバーかなど
-        
+
+        // プレイヤーの入力を受け付ける
+        // キー入力で回転
+
+
+        // 当たり判定
+        // もし次移動する場所がブロックまたは床だったら、fieldにテトロを追加
+
+
+
+
+
+
+        // 仮にy座標を+1ずつする
+
+        if (this.currentTetromino.y == 18) return;
+        this.currentTetromino.y += 1;
+
         this.renderer.clear();
         this.renderer.drawField(this.field);
         this.renderer.drawTetromino(this.currentTetromino);
-        // プレイヤーの入力で動かす
-        // 仮にy座標を+1ずつする
-        this.currentTetromino.y += 1;
-
-        if (this.currentTetromino.y === 10) return;
 
     }
 
