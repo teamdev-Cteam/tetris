@@ -62,7 +62,7 @@ class Game {
                     this.isGameOver = true;
                 }
             }
-        }this.currentTetromino.shape
+        }
     }
 
     canMove(movementX, movementY, newTetro = this.currentTetromino.shape) {
