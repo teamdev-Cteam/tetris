@@ -308,7 +308,7 @@ document.onkeydown = function(e) {
             let newTetro = game.currentTetromino.rotate();
             if (game.canMove(0, 0, newTetro)) game.currentTetromino.shape = newTetro;
             break;
-        case "Shift":
+        case " ":
             while (game.canMove(0, 1)) game.currentTetromino.y++;
             break;
     }
