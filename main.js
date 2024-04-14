@@ -310,7 +310,6 @@ document.onkeydown = function(e) {
             if (game.canMove(0, 0, newTetro)) game.currentTetromino.shape = newTetro;
             break;
         case " ":
-            console.log(1+1);
             while (game.canMove(0, 1)) game.currentTetromino.y++;
             break; 
     }
