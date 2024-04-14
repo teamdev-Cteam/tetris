@@ -33,6 +33,8 @@ class Game {
 
 
 
+
+
         this.moveTetro();
 
         this.renderer.clear();
@@ -42,7 +44,7 @@ class Game {
     }
 
     moveTetro() {
-        if (this.currentTetromino.y === 17) {
+        if (!this.canMove(0, 1)) {
             this.field.addTetromino(this.currentTetromino);
             this.currentTetromino = this.generateNewTetromino();
         }
@@ -51,6 +53,19 @@ class Game {
 
     checkGameOver(){
 
+    }
+
+    canMove(movementX, movementY, newTetro = this.currentTetromino.tetro) {
+        for (let y = 0; y < newTetro.length; y++) {
+            for (let x = 0; x < newTetro[y].length; x++) {
+                if (newTetro[y][x]) {
+                    let newX = this.currentTetromino.x + movementX + x;
+                    let newY = this.currentTetromino.y + movementY + y;
+                    if (newY < 0 || newY >= this.field.rows || newX < 0 || newX >= this.field.cols || this.field.grid[newY][newX]) return false;
+                }
+            }
+        }
+        return true;
     }
 }
 
@@ -141,7 +156,14 @@ class Tetromino {
     }
 
     rotate() {
-
+        let newTetro = [];
+        for (let y = 0; y < this.tetro.length; y++) {
+            newTetro[y] = [];
+            for (let x = 0; x < this.tetro[y].length; x++) {
+                newTetro[y][x] = this.tetro[this.tetro.length - x - 1][y];
+            }
+        }
+        return newTetro;
     }
 }
 
@@ -201,23 +223,8 @@ class Field {
     
         return linesCleared;
     }
-    
 
-    canMove(currX, currY, movementX, movementY, newTetro) {
-        for (let y = 0; y < newTetro.length; y++) {
-            for (let x = 0; x < newTetro[y].length; x++) {
-                if (newTetro[y][x]) {
-                    let newX = currX + movementX + x;
-                    let newY = currY + movementY + y;
-                    if (newY < 0 || newY >= this.rows || newX < 0 || newX >= this.cols || this.grid[newY][newX]) {
-                        console.log(newX, newY);
-                        return false;
-                    }
-                }
-            }
-        }
-        return true;
-    }
+
 }
 
 class Renderer{
@@ -268,8 +275,31 @@ class Renderer{
 
 function gameStart() {
     console.log("gameStart");
-    const game = new Game();
     game.start();
 }
 
+const game = new Game();
 gameStart();
+
+
+document.onkeydown = function(e) {
+    if (game.isGameOver) return;
+    switch(e.key) {
+        case "ArrowLeft":
+            if (game.canMove(-1, 0)) game.currentTetromino.x--;
+            break;
+        case "ArrowRight":
+            if (game.canMove(1, 0)) game.currentTetromino.x++;
+            break;
+        case "ArrowDown":
+            while (game.canMove(0, 1)) game.currentTetromino.y++;
+            break;
+        case "ArrowUp":
+            let newTetro = game.currentTetromino.rotate();
+            if (game.canMove(0, 0, newTetro)) game.currentTetromino.tetro = newTetro;
+            break;
+    }
+    game.renderer.clear();
+    game.renderer.drawField(game.field);
+    game.renderer.drawTetromino(game.currentTetromino);
+}
