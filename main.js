@@ -302,11 +302,14 @@ document.onkeydown = function(e) {
             if (game.canMove(1, 0)) game.currentTetromino.x++;
             break;
         case "ArrowDown":
-            while (game.canMove(0, 1)) game.currentTetromino.y++;
+            if (game.canMove(0, 1)) game.currentTetromino.y++;
             break;
         case "ArrowUp":
             let newTetro = game.currentTetromino.rotate();
             if (game.canMove(0, 0, newTetro)) game.currentTetromino.shape = newTetro;
+            break;
+        case "Shift":
+            while (game.canMove(0, 1)) game.currentTetromino.y++;
             break;
     }
     game.renderer.clear();
