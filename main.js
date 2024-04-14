@@ -177,8 +177,31 @@ class Field {
     }
 
     clearLines() {
-
+        let linesCleared = 0;
+    
+        for (let y = this.rows - 1; y >= 0; y--) {
+            let isFull = true;
+    
+            for (let x = 0; x < this.cols; x++) {
+                if (this.grid[y][x] === 0) {
+                    isFull = false;
+                    break;
+                }
+            }
+    
+            if (isFull) {
+                this.grid.splice(y, 1);
+                linesCleared++;
+    
+                this.grid.unshift(new Array(this.cols).fill(0));
+    
+                y++;
+            }
+        }
+    
+        return linesCleared;
     }
+    
 
     canMove(currX, currY, movementX, movementY, newTetro) {
         for (let y = 0; y < newTetro.length; y++) {
