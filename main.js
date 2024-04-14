@@ -32,14 +32,13 @@ class Game {
         }
 
 
-
-
-
-        this.moveTetro();
-
         this.renderer.clear();
         this.renderer.drawField(this.field);
         this.renderer.drawTetromino(this.currentTetromino);
+
+
+        this.moveTetro();
+        this.field.clearLines();
 
     }
 
