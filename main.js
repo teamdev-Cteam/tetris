@@ -55,7 +55,7 @@ class Game {
 
     }
 
-    canMove(movementX, movementY, newTetro = this.currentTetromino.tetro) {
+    canMove(movementX, movementY, newTetro = this.currentTetromino.shape) {
         for (let y = 0; y < newTetro.length; y++) {
             for (let x = 0; x < newTetro[y].length; x++) {
                 if (newTetro[y][x]) {
@@ -157,10 +157,10 @@ class Tetromino {
 
     rotate() {
         let newTetro = [];
-        for (let y = 0; y < this.tetro.length; y++) {
+        for (let y = 0; y < this.shape.length; y++) {
             newTetro[y] = [];
-            for (let x = 0; x < this.tetro[y].length; x++) {
-                newTetro[y][x] = this.tetro[this.tetro.length - x - 1][y];
+            for (let x = 0; x < this.shape[y].length; x++) {
+                newTetro[y][x] = this.shape[this.shape.length - x - 1][y];
             }
         }
         return newTetro;
@@ -296,7 +296,7 @@ document.onkeydown = function(e) {
             break;
         case "ArrowUp":
             let newTetro = game.currentTetromino.rotate();
-            if (game.canMove(0, 0, newTetro)) game.currentTetromino.tetro = newTetro;
+            if (game.canMove(0, 0, newTetro)) game.currentTetromino.shape = newTetro;
             break;
     }
     game.renderer.clear();
