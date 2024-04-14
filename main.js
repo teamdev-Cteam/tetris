@@ -27,7 +27,7 @@ class Game {
     update(){
 
         
-
+        this.checkGameOver();
         if (this.isGameOver){
             clearInterval(this.gameInterval);
             console.log("Game Over");
@@ -39,7 +39,6 @@ class Game {
         this.renderer.drawField(this.field);
         this.renderer.drawTetromino(this.currentTetromino);
 
-        this.checkGameOver();
         this.moveTetro();
         this.field.clearLines();
         
@@ -49,6 +48,7 @@ class Game {
         if (!this.canMove(0, 1)) {
             this.field.addTetromino(this.currentTetromino);
             this.currentTetromino = this.generateNewTetromino();
+            return;
         }
         this.currentTetromino.y += 1;
     }
@@ -84,18 +84,18 @@ class Tetromino {
         this.tetrominoShapes = {
             'T': {
                 shape: [
-                    [1, 0, 0],
-                    [1, 1, 0],
-                    [1, 0, 0]
+                    [0, 1, 0],
+                    [1, 1, 1],
+                    [0, 0, 0]
                 ],
                 color: 'purple',
                 startX: 4
             },
             'L': {
                 shape: [
-                    [2, 0, 0],
-                    [2, 0, 0],
-                    [2, 2, 0]
+                    [0, 0, 2],
+                    [2, 2, 2],
+                    [0, 0, 0],
                 ],
                 color: 'orange',
                 startX: 4
@@ -129,9 +129,9 @@ class Tetromino {
             },
             'J': {
                 shape: [
-                    [0, 6, 0],
-                    [0, 6, 0],
-                    [6, 6, 0]
+                    [6, 0, 0],
+                    [6, 6, 6],
+                    [0, 0, 0]
                 ],
                 color: 'blue',
                 startX: 3
@@ -173,6 +173,7 @@ class Tetromino {
                 newTetro[y][x] = this.shape[this.shape.length - x - 1][y];
             }
         }
+        console.log(newTetro);
         return newTetro;
     }
 }
@@ -308,9 +309,10 @@ document.onkeydown = function(e) {
             let newTetro = game.currentTetromino.rotate();
             if (game.canMove(0, 0, newTetro)) game.currentTetromino.shape = newTetro;
             break;
-        case "Shift":
+        case " ":
+            console.log(1+1);
             while (game.canMove(0, 1)) game.currentTetromino.y++;
-            break;
+            break; 
     }
     game.renderer.clear();
     game.renderer.drawField(game.field);
