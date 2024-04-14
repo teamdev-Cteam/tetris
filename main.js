@@ -25,6 +25,9 @@ class Game {
     }
 
     update(){
+
+        
+
         if (this.isGameOver){
             clearInterval(this.gameInterval);
             console.log("Game Over");
@@ -36,10 +39,10 @@ class Game {
         this.renderer.drawField(this.field);
         this.renderer.drawTetromino(this.currentTetromino);
 
-
+        this.checkGameOver();
         this.moveTetro();
         this.field.clearLines();
-
+        
     }
 
     moveTetro() {
@@ -51,7 +54,15 @@ class Game {
     }
 
     checkGameOver(){
-
+        let shape = this.currentTetromino.shape
+        for (let x = 0; x < shape.length; x++){
+            for (let y = 0; y < shape.length; y++) {
+                
+                if (shape[y][x] && this.field.grid[y + this.currentTetromino.y][x + this.currentTetromino.x]) {
+                    this.isGameOver = true;
+                }
+            }
+        }this.currentTetromino.shape
     }
 
     canMove(movementX, movementY, newTetro = this.currentTetromino.shape) {
