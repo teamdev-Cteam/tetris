@@ -104,7 +104,7 @@ class Game {
         }
         this.doPause = true;
         this.gameInterval = setInterval(() => this.update(), 500);
-
+    }
     displayTime() {
         const currentTime = new Date(Date.now() - this.startTime);
         const h = String(currentTime.getHours()-9).padStart(2, '0');
