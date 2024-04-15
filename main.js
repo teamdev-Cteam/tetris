@@ -51,8 +51,8 @@ class Game {
 
         this.renderer.clear();
         this.renderer.drawField(this.field);
-        this.renderer.drawTetromino(this.currentTetromino);
         this.renderer.drawShadow(this.currentTetromino);
+        this.renderer.drawTetromino(this.currentTetromino);
         this.moveTetro();
         this.field.clearLines();
         
@@ -298,6 +298,7 @@ class Renderer{
                 if (colorCode !== 0) {
                     let [r, g, b] = field.colorType[colorCode];
                     this.context.fillStyle = `rgb(${r}, ${g}, ${b})`
+                    this.context.strokeStyle = `rgba(0, 0, 0, 1)`;  
                     this.context.fillRect(x * this.blockSize, y * this.blockSize, this.blockSize, this.blockSize);
                     this.context.strokeRect(x * this.blockSize, y * this.blockSize, this.blockSize, this.blockSize); // ブロックの枠線を描画
                 }
@@ -307,10 +308,13 @@ class Renderer{
 
     drawTetromino(tetro){
         let [r, g, b] = tetro.color;
+        this.context.strokeStyle = `rgba(0, 0, 0, 1)`;  
         this.context.fillStyle = `rgb(${r}, ${g}, ${b})`; // テトロミノの色を設定
         for (let y = 0; y < tetro.shape.length; y++) {
             for (let x = 0; x < tetro.shape[y].length; x++) {
                 if (tetro.shape[y][x] != 0) { // テトロミノの形状配列で1に相当する部分を描画
+                    this.context.fillRect((tetro.x + x) * this.blockSize, (tetro.y + y) * this.blockSize, this.blockSize, this.blockSize);
+                    this.context.strokeRect((tetro.x + x) * this.blockSize, (tetro.y + y) * this.blockSize, this.blockSize, this.blockSize); // ブロックの枠線を描画
                     this.context.fillRect((tetro.x + x) * this.blockSize, (tetro.y + y) * this.blockSize, this.blockSize, this.blockSize);
                     this.context.strokeRect((tetro.x + x) * this.blockSize, (tetro.y + y) * this.blockSize, this.blockSize, this.blockSize); // ブロックの枠線を描画
                 }
@@ -321,6 +325,7 @@ class Renderer{
     drawShadow(tetro) {
         let [r, g, b] = tetro.color;
         this.context.fillStyle = `rgba(${r}, ${g}, ${b}, 0.3)`;
+        this.context.strokeStyle = `rgba(0, 0, 0, 0.1)`;
         let shadowY = 0;
         while (game.canMove(0, shadowY + 1)) shadowY += 1;
         for (let y = 0; y < tetro.shape.length; y++) {
@@ -370,6 +375,6 @@ document.onkeydown = function(e) {
     }
     game.renderer.clear();
     game.renderer.drawField(game.field);
-    game.renderer.drawTetromino(game.currentTetromino);
     game.renderer.drawShadow(game.currentTetromino);
+    game.renderer.drawTetromino(game.currentTetromino);
 }
