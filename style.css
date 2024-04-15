@@ -1,0 +1,52 @@
+body {
+    background-image: url(https://cdn.discordapp.com/attachments/1225406402521202699/1229055878523654214/OIG3_1.jpg?ex=662e4a7c&is=661bd57c&hm=60fdec8b18d39cc90df86ac86ade279314c64bbddf7a899b0810a0feba25c1d9&);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-position: center center;
+    /* コンテンツの高さが画像の高さより大きい時、動かないように固定 */
+    background-attachment: fixed;
+}
+
+.red {
+    color: red;
+}
+
+.orange {
+    color: orange;
+}
+
+.yellow {
+    color: yellow;
+}
+
+.green {
+    color: green;
+}
+
+.blue {
+    color: blue;
+}
+
+.purple {
+    color: purple;
+}
+
+.info {
+    color: white;
+    background: black;
+    padding-left: 5px;
+    margin-bottom: 0;
+}
+
+.info-main {
+    color: white;
+    background: rgb(65, 64, 64);
+    padding-left: 5px;
+    margin-top: 0;
+}
+
+canvas {
+    border: 5px solid black;
+    border-radius: 5px;
+}

@@ -5,6 +5,7 @@ class Game {
         this.isGameOver = false;
         this.gameInterval = null;
         this.renderer = this.initRenderer();
+        this.startTime = Date.now();
     }
 
     initRenderer(){
@@ -21,12 +22,11 @@ class Game {
     start(){
         this.isGameOver = false;
         this.gameInterval = setInterval(() => this.update(), 500);
-
     }
 
     update(){
 
-        
+        this.displayTime();
         this.checkGameOver();
         if (this.isGameOver){
             clearInterval(this.gameInterval);
@@ -59,6 +59,7 @@ class Game {
             for (let y = 0; y < shape.length; y++) {
                 
                 if (shape[y][x] && this.field.grid[y + this.currentTetromino.y][x + this.currentTetromino.x]) {
+                    document.getElementById("modal-btn").dispatchEvent(new Event("click"));
                     this.isGameOver = true;
                 }
             }
@@ -76,6 +77,16 @@ class Game {
             }
         }
         return true;
+    }
+
+    displayTime() {
+        const currentTime = new Date(Date.now() - this.startTime);
+        const h = String(currentTime.getHours()-9).padStart(2, '0');
+        const m = String(currentTime.getMinutes()).padStart(2, '0');
+        const s = String(currentTime.getSeconds()).padStart(2, '0');
+
+        const time = document.getElementById('time');
+        time.textContent = `${h}:${m}:${s}`;
     }
 }
 
@@ -285,12 +296,14 @@ class Renderer{
 
 
 function gameStart() {
+    game = new Game();
     console.log("gameStart");
     game.start();
 }
 
-const game = new Game();
+let game;
 gameStart();
+
 
 
 document.onkeydown = function(e) {
