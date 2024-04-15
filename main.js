@@ -60,7 +60,9 @@ class Game {
     moveTetro() {
         if (!this.canMove(0, 1)) {
             this.field.addTetromino(this.currentTetromino);
-            this.currentTetromino = this.generateNewTetromino();
+            this.currentTetromino = this.nextTetros.shift(0);
+            this.nextTetros.push(this.generateNewTetromino());
+            console.log(this.nextTetros);
             return;
         }
         this.currentTetromino.y += 1;
