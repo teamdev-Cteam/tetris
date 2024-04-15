@@ -38,7 +38,7 @@ class Game {
         this.renderer.clear();
         this.renderer.drawField(this.field);
         this.renderer.drawTetromino(this.currentTetromino);
-
+        this.renderer.drawShadow(this.currentTetromino);
         this.moveTetro();
         this.field.clearLines();
         
@@ -88,7 +88,7 @@ class Tetromino {
                     [1, 1, 1],
                     [0, 0, 0]
                 ],
-                color: 'purple',
+                color: [191, 127, 255],
                 startX: 4
             },
             'L': {
@@ -97,7 +97,7 @@ class Tetromino {
                     [2, 2, 2],
                     [0, 0, 0],
                 ],
-                color: 'orange',
+                color: [255,191,127],
                 startX: 4
             },
             'I': {
@@ -107,7 +107,7 @@ class Tetromino {
                     [0, 0, 0, 0],
                     [0, 0, 0, 0]
                 ],
-                color: 'cyan',
+                color: [127,255,255],
                 startX: 3
             },
             'O': {
@@ -115,7 +115,7 @@ class Tetromino {
                     [4, 4],
                     [4, 4]
                 ],
-                color: 'yellow',
+                color: [255,255,127],
                 startX: 4
             },
             'S': {
@@ -124,7 +124,7 @@ class Tetromino {
                     [5, 5, 0],
                     [0, 0, 0]
                 ],
-                color: 'green',
+                color: [127,255,127],
                 startX: 3
             },
             'J': {
@@ -133,7 +133,7 @@ class Tetromino {
                     [6, 6, 6],
                     [0, 0, 0]
                 ],
-                color: 'blue',
+                color: [127,191,255],
                 startX: 3
             },
             'Z': {
@@ -142,7 +142,7 @@ class Tetromino {
                     [0, 7, 7],
                     [0, 0, 0]
                 ],
-                color: 'red',
+                color: [255,127,127],
                 startX: 3
             }
         };
@@ -267,7 +267,8 @@ class Renderer{
     }
 
     drawTetromino(tetro){
-        this.context.fillStyle = tetro.color; // テトロミノの色を設定
+        let [r, g, b] = tetro.color;
+        this.context.fillStyle = `rgb(${r}, ${g}, ${b})`; // テトロミノの色を設定
         for (let y = 0; y < tetro.shape.length; y++) {
             for (let x = 0; x < tetro.shape[y].length; x++) {
                 if (tetro.shape[y][x] != 0) { // テトロミノの形状配列で1に相当する部分を描画
@@ -278,7 +279,20 @@ class Renderer{
         
         }
     }
-    
+    drawShadow(tetro) {
+        let [r, g, b] = tetro.color;
+        this.context.fillStyle = `rgba(${r}, ${g}, ${b}, 0.3)`;
+        let shadowY = 0;
+        while (game.canMove(0, shadowY + 1)) shadowY += 1;
+        for (let y = 0; y < tetro.shape.length; y++) {
+            for (let x = 0; x < tetro.shape[y].length; x++) {
+                if (tetro.shape[y][x] != 0) { // テトロミノの形状配列で1に相当する部分を描画
+                    this.context.fillRect((tetro.x + x) * this.blockSize, (tetro.y + shadowY + y) * this.blockSize, this.blockSize, this.blockSize);
+                    this.context.strokeRect((tetro.x + x) * this.blockSize, (tetro.y + shadowY + y) * this.blockSize, this.blockSize, this.blockSize); // ブロックの枠線を描画
+                }
+            }
+        }
+    }
 }
 
 
@@ -316,4 +330,5 @@ document.onkeydown = function(e) {
     game.renderer.clear();
     game.renderer.drawField(game.field);
     game.renderer.drawTetromino(game.currentTetromino);
+    game.renderer.drawShadow(game.currentTetromino);
 }
