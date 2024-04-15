@@ -6,6 +6,7 @@ class Game {
         this.isGameOver = false;
         this.gameInterval = null;
         this.renderer = this.initRenderer();
+        this.doPause = true;
         this.startTime = Date.now();
 
         console.log(this.nextTetros);
@@ -39,6 +40,7 @@ class Game {
     update(){
 
         this.displayTime();
+
         this.checkGameOver();
         if (this.isGameOver){
             clearInterval(this.gameInterval);
@@ -93,6 +95,16 @@ class Game {
         return true;
     }
 
+
+    startStop() {
+        if (this.doPause) {
+            clearInterval(this.gameInterval);
+            this.doPause = false;
+            return;
+        }
+        this.doPause = true;
+        this.gameInterval = setInterval(() => this.update(), 500);
+
     displayTime() {
         const currentTime = new Date(Date.now() - this.startTime);
         const h = String(currentTime.getHours()-9).padStart(2, '0');
@@ -101,6 +113,7 @@ class Game {
 
         const time = document.getElementById('time');
         time.textContent = `${h}:${m}:${s}`;
+
     }
 }
 
