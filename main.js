@@ -2,10 +2,23 @@ class Game {
     constructor(){
         this.field = new Field(20, 10);
         this.currentTetromino = this.generateNewTetromino();
+        this.nextTetros = this.generateNextTetros();
         this.isGameOver = false;
         this.gameInterval = null;
         this.renderer = this.initRenderer();
         this.doPause = true;
+        this.startTime = Date.now();
+
+        console.log(this.nextTetros);
+    }
+
+    generateNextTetros(){
+        let nextTetros = [];
+        for (let i=0; i<4; i++){
+            let newTetro = this.generateNewTetromino();
+            nextTetros.push(newTetro);
+        }
+        return nextTetros
     }
 
     initRenderer(){
@@ -22,10 +35,11 @@ class Game {
     start(){
         this.isGameOver = false;
         this.gameInterval = setInterval(() => this.update(), 500);
-
     }
 
     update(){
+
+        this.displayTime();
 
         this.checkGameOver();
         if (this.isGameOver){
@@ -47,7 +61,9 @@ class Game {
     moveTetro() {
         if (!this.canMove(0, 1)) {
             this.field.addTetromino(this.currentTetromino);
-            this.currentTetromino = this.generateNewTetromino();
+            this.currentTetromino = this.nextTetros.shift(0);
+            this.nextTetros.push(this.generateNewTetromino());
+            console.log(this.nextTetros);
             return;
         }
         this.currentTetromino.y += 1;
@@ -59,6 +75,7 @@ class Game {
             for (let y = 0; y < shape.length; y++) {
                 
                 if (shape[y][x] && this.field.grid[y + this.currentTetromino.y][x + this.currentTetromino.x]) {
+                    document.getElementById("modal-btn").dispatchEvent(new Event("click"));
                     this.isGameOver = true;
                 }
             }
@@ -78,6 +95,7 @@ class Game {
         return true;
     }
 
+
     startStop() {
         if (this.doPause) {
             clearInterval(this.gameInterval);
@@ -86,6 +104,16 @@ class Game {
         }
         this.doPause = true;
         this.gameInterval = setInterval(() => this.update(), 500);
+
+    displayTime() {
+        const currentTime = new Date(Date.now() - this.startTime);
+        const h = String(currentTime.getHours()-9).padStart(2, '0');
+        const m = String(currentTime.getMinutes()).padStart(2, '0');
+        const s = String(currentTime.getSeconds()).padStart(2, '0');
+
+        const time = document.getElementById('time');
+        time.textContent = `${h}:${m}:${s}`;
+
     }
 }
 
@@ -183,7 +211,6 @@ class Tetromino {
                 newTetro[y][x] = this.shape[this.shape.length - x - 1][y];
             }
         }
-        console.log(newTetro);
         return newTetro;
     }
 }
@@ -295,12 +322,14 @@ class Renderer{
 
 
 function gameStart() {
+    game = new Game();
     console.log("gameStart");
     game.start();
 }
 
-const game = new Game();
+let game;
 gameStart();
+
 
 
 document.onkeydown = function(e) {
