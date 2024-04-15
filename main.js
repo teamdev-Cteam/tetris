@@ -219,7 +219,8 @@ class Field {
     constructor(rows, cols) {
         this.rows = rows;
         this.cols = cols;
-        this.colorType = {1: 'purple', 2: 'orange', 3: 'cyan', 4: 'yellow', 5: 'green', 6: 'blue', 7:'red'};
+        //this.colorType = {1: 'purple', 2: 'orange', 3: 'cyan', 4: 'yellow', 5: 'green', 6: 'blue', 7:'red'};
+        this.colorType = {1: [191, 127, 255], 2: [255,191,127], 3: [127,255,255], 4: [255,255,127], 5: [127,255,127], 6: [127,191,255], 7:[255,127,127]};
         this.grid = this.initializeGrid(rows, cols);
     }
 
@@ -295,7 +296,8 @@ class Renderer{
             for (let x = 0; x < field.cols; x++) {
                 let colorCode = field.grid[y][x];
                 if (colorCode !== 0) {
-                    this.context.fillStyle = field.colorType[colorCode];
+                    let [r, g, b] = field.colorType[colorCode];
+                    this.context.fillStyle = `rgb(${r}, ${g}, ${b})`
                     this.context.fillRect(x * this.blockSize, y * this.blockSize, this.blockSize, this.blockSize);
                     this.context.strokeRect(x * this.blockSize, y * this.blockSize, this.blockSize, this.blockSize); // ブロックの枠線を描画
                 }
