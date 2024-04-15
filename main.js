@@ -2,9 +2,22 @@ class Game {
     constructor(){
         this.field = new Field(20, 10);
         this.currentTetromino = this.generateNewTetromino();
+        this.nextTetros = this.generateNextTetros();
         this.isGameOver = false;
         this.gameInterval = null;
         this.renderer = this.initRenderer();
+
+        console.log(this.nextTetros);
+    }
+
+    generateNextTetros(){
+        let nextTetros = [];
+        for (let i=0; i<4; i++){
+            let newTetro = this.generateNewTetromino();
+            nextTetros.push(newTetro);
+        }
+        return nextTetros
+
     }
 
     initRenderer(){
@@ -47,7 +60,9 @@ class Game {
     moveTetro() {
         if (!this.canMove(0, 1)) {
             this.field.addTetromino(this.currentTetromino);
-            this.currentTetromino = this.generateNewTetromino();
+            this.currentTetromino = this.nextTetros.shift(0);
+            this.nextTetros.push(this.generateNewTetromino());
+            console.log(this.nextTetros);
             return;
         }
         this.currentTetromino.y += 1;
@@ -173,7 +188,6 @@ class Tetromino {
                 newTetro[y][x] = this.shape[this.shape.length - x - 1][y];
             }
         }
-        console.log(newTetro);
         return newTetro;
     }
 }
