@@ -5,6 +5,7 @@ class Game {
         this.isGameOver = false;
         this.gameInterval = null;
         this.renderer = this.initRenderer();
+        this.doPause = true;
     }
 
     initRenderer(){
@@ -26,7 +27,6 @@ class Game {
 
     update(){
 
-        
         this.checkGameOver();
         if (this.isGameOver){
             clearInterval(this.gameInterval);
@@ -76,6 +76,16 @@ class Game {
             }
         }
         return true;
+    }
+
+    startStop() {
+        if (this.doPause) {
+            clearInterval(this.gameInterval);
+            this.doPause = false;
+            return;
+        }
+        this.doPause = true;
+        this.gameInterval = setInterval(() => this.update(), 500);
     }
 }
 
