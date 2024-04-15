@@ -301,6 +301,8 @@ class Renderer{
                     this.context.strokeStyle = `rgba(0, 0, 0, 1)`;  
                     this.context.fillRect(x * this.blockSize, y * this.blockSize, this.blockSize, this.blockSize);
                     this.context.strokeRect(x * this.blockSize, y * this.blockSize, this.blockSize, this.blockSize); // ブロックの枠線を描画
+                    this.context.fillRect(x * this.blockSize, y * this.blockSize, this.blockSize, this.blockSize);
+                    this.context.strokeRect(x * this.blockSize, y * this.blockSize, this.blockSize, this.blockSize); // ブロックの枠線を描画
                 }
             }
         }
