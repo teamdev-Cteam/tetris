@@ -8,8 +8,6 @@ class Game {
         this.renderer = this.initRenderer();
         this.doPause = true;
         this.startTime = Date.now();
-
-        console.log(this.nextTetros);
     }
 
     generateNextTetros(){
@@ -280,10 +278,10 @@ class Renderer{
     constructor(canvas, context){
         this.canvas = canvas;
         this.context = context;
-        this.blockSize = 25;
+        this.blockSize = 27;
         this.canvas.width = this.blockSize * 10;
         this.canvas.height = this.blockSize * 20;
-        this.canvas.style.backgroundColor = "gray";
+        this.canvas.style.backgroundColor = `rgb(64, 64, 64)`;
     }
 
     clear(){
@@ -300,9 +298,12 @@ class Renderer{
                     this.context.fillStyle = `rgb(${r}, ${g}, ${b})`
                     this.context.strokeStyle = `rgba(0, 0, 0, 1)`;  
                     this.context.fillRect(x * this.blockSize, y * this.blockSize, this.blockSize, this.blockSize);
-                    this.context.strokeRect(x * this.blockSize, y * this.blockSize, this.blockSize, this.blockSize); // ブロックの枠線を描画
+                    this.context.strokeRect(x * this.blockSize, y * this.blockSize, this.blockSize, this.blockSize);
+                } else {
+                    this.context.fillStyle = `rgb(64, 64, 64)`
+                    this.context.strokeStyle = `rgba(0, 0, 0, 1)`;  
                     this.context.fillRect(x * this.blockSize, y * this.blockSize, this.blockSize, this.blockSize);
-                    this.context.strokeRect(x * this.blockSize, y * this.blockSize, this.blockSize, this.blockSize); // ブロックの枠線を描画
+                    this.context.strokeRect(x * this.blockSize, y * this.blockSize, this.blockSize, this.blockSize);
                 }
             }
         }
