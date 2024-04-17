@@ -538,6 +538,7 @@ class Renderer{
 
 
 
+
 function displayNone(ele) {
     ele.classList.remove("d-block");
     ele.classList.add("d-none");
