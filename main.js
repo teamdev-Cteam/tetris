@@ -57,6 +57,9 @@ class Game {
         let linesCleared = this.field.clearLines();
         if (linesCleared > 0) {
             this.scoreManager.incrementLinesCleared(linesCleared);
+            this.scoreManager.incrementCombo();
+        } else {
+            this.scoreManager.initCombo();
         }
         
     }
@@ -195,8 +198,10 @@ class Tetromino {
 
     getRandomTetrominoShape() {
         const shapes = Object.keys(this.tetrominoShapes);
-        // const randomShape = shapes[Math.floor(Math.random() * shapes.length)];
-        return this.tetrominoShapes["I"];
+        const randomShape = shapes[Math.floor(Math.random() * shapes.length)];
+        return this.tetrominoShapes[randomShape];
+        // テスト用
+        // return this.tetrominoShapes["I"];
     }
     
 
@@ -282,7 +287,10 @@ class ScoreManager {
         this.score = 0;
         this.level = 1;
         this.linesCleared = 0;
+        this.combo = 0;
     }
+
+    // perfect Clear, Combo, Line, HardSoftDrop, Gravity, level;
 
     addScore(linesCleared) {
         const scores = {1: 100, 2: 300, 3: 500, 4 : 800};
@@ -323,6 +331,19 @@ class ScoreManager {
 
     getLevel() {
         return this.level;
+    }
+
+    initCombo() {
+        this.combo = 0;
+    }
+
+    incrementCombo() {
+        this.combo += 1;
+        console.log("COMBO前");
+        console.log(this.score);
+        this.score += this.combo * 50;
+        console.log("COMBO後");
+        console.log(this.score);
     }
 }
 
