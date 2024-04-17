@@ -519,16 +519,18 @@ class Renderer{
     }
 
     drawHoldTetro(holdTetro) {
+        
         if (game.holdTetromino == null) return;
-        let maxW = 0;
         let h = 0;
         for (let y = 0; y < holdTetro.shape.length; y++) {
             let w = 0;
             for (let x = 0; x < holdTetro.shape[y].length; x++) {
                 if (holdTetro.shape[y][x] != 0) w++;
             }
-            if (w > maxW) maxW = w;
+
             if (w != 0) h++;
+            // hが0なら無条件で足す
+            if (h == 0) h++;
         }
 
         this.holdContext.clearRect(0, 0, this.holdCanvas.width, this.holdCanvas.height);
@@ -537,8 +539,8 @@ class Renderer{
         for (let y = 0; y < holdTetro.shape.length; y++) {
             for (let x = 0; x < holdTetro.shape[y].length; x++) {
                 if (holdTetro.shape[y][x] != 0) {
-                    this.holdContext.fillRect((x + (this.miniWidth - maxW) / 2) * this.blockSize, (y + (4 - h) / 2) * this.blockSize, this.blockSize, this.blockSize);
-                    this.holdContext.strokeRect((x + (this.miniWidth - maxW) / 2) * this.blockSize, (y + (4 - h) / 2) * this.blockSize, this.blockSize, this.blockSize);
+                    this.holdContext.fillRect((x + (this.miniWidth - holdTetro.shape.length) / 2) * this.blockSize, (y + (4 - h) / 2) * this.blockSize, this.blockSize, this.blockSize);
+                    this.holdContext.strokeRect((x + (this.miniWidth - holdTetro.shape.length) / 2) * this.blockSize, (y + (4 - h) / 2) * this.blockSize, this.blockSize, this.blockSize);
                 }
             }
         }
