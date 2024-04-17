@@ -15,8 +15,6 @@ class Game {
         this.doPause = false;
         this.startTime = Date.now();
         this.stopTime = 0;
-
-        console.log(this.nextTetros);
     }
 
     generateNextTetros(){
@@ -46,6 +44,7 @@ class Game {
 
     start(){
         this.isGameOver = false;
+        this.update();
         this.gameInterval = setInterval(() => this.update(), 500);
     }
 
@@ -62,9 +61,9 @@ class Game {
 
         this.renderer.clear();
         this.renderer.drawField(this.field);
-        this.renderer.drawTetromino(this.currentTetromino);
         this.renderer.drawShadow(this.currentTetromino);
         this.renderer.drawNextTetros(this.nextTetros);
+        this.renderer.drawTetromino(this.currentTetromino);
         this.moveTetro();
         this.field.clearLines();
         
@@ -240,8 +239,7 @@ class Field {
     constructor(rows, cols) {
         this.rows = rows;
         this.cols = cols;
-        //this.colorType = {1: 'purple', 2: 'orange', 3: 'cyan', 4: 'yellow', 5: 'green', 6: 'blue', 7:'red'};
-        this.colorType = {1: [191, 127, 255], 2: [255,191,127], 3: [127,255,255], 4: [255,255,127], 5: [127,255,127], 6: [127,191,255], 7:[255,127,127]};
+        this.colorType = {0: [64, 64, 64], 1: [191, 127, 255], 2: [255,191,127], 3: [127,255,255], 4: [255,255,127], 5: [127,255,127], 6: [127,191,255], 7:[255,127,127]};
         this.grid = this.initializeGrid(rows, cols);
     }
 
@@ -301,9 +299,10 @@ class Renderer{
     constructor(canvas, context, nextCanvas, nextContext, next3Canvas, next3Context, holdCanvas, holdContext){
         this.canvas = canvas;
         this.context = context;
-        this.blockSize = 25;
+        this.blockSize = 27;
         this.canvas.width = this.blockSize * 10;
         this.canvas.height = this.blockSize * 20;
+
         this.canvas.style.backgroundColor = "gray";
 
         this.miniWidth = 5; 
@@ -331,29 +330,41 @@ class Renderer{
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
-    drawField(field){
 
+    drawBlock(x, y, r, g, b) {
+        let blockEdge = this.blockSize;
+
+        // ブロックの本体
+        this.context.fillRect(x * blockEdge, y * blockEdge, blockEdge, blockEdge);
+        this.context.strokeRect(x * blockEdge, y * blockEdge, blockEdge, blockEdge);
+
+        // 影の描画
+        this.context.fillStyle = `rgba(0, 0, 0, 0.2)`;
+        this.context.fillRect(x * blockEdge + 5, y * blockEdge + 5, blockEdge, blockEdge);
+    }
+
+    drawField(field){
+ 
         for (let y = 0; y < field.rows; y++) {
             for (let x = 0; x < field.cols; x++) {
                 let colorCode = field.grid[y][x];
-                if (colorCode !== 0) {
-                    let [r, g, b] = field.colorType[colorCode];
-                    this.context.fillStyle = `rgb(${r}, ${g}, ${b})`
-                    this.context.fillRect(x * this.blockSize, y * this.blockSize, this.blockSize, this.blockSize);
-                    this.context.strokeRect(x * this.blockSize, y * this.blockSize, this.blockSize, this.blockSize); // ブロックの枠線を描画
-                }
+                let [r, g, b] = field.colorType[colorCode];
+                this.context.fillStyle = `rgb(${r}, ${g}, ${b})`
+                this.context.strokeStyle = `rgba(0, 0, 0, 1)`;
+                this.drawBlock(x, y, r, g, b);
             }
         }
     }
+    
 
     drawTetromino(tetro){
         let [r, g, b] = tetro.color;
-        this.context.fillStyle = `rgb(${r}, ${g}, ${b})`; // テトロミノの色を設定
         for (let y = 0; y < tetro.shape.length; y++) {
             for (let x = 0; x < tetro.shape[y].length; x++) {
-                if (tetro.shape[y][x] != 0) { // テトロミノの形状配列で1に相当する部分を描画
-                    this.context.fillRect((tetro.x + x) * this.blockSize, (tetro.y + y) * this.blockSize, this.blockSize, this.blockSize);
-                    this.context.strokeRect((tetro.x + x) * this.blockSize, (tetro.y + y) * this.blockSize, this.blockSize, this.blockSize); // ブロックの枠線を描画
+                if (tetro.shape[y][x] != 0) {
+                    this.context.fillStyle = `rgb(${r}, ${g}, ${b})`
+                    this.context.strokeStyle = `rgba(0, 0, 0, 1)`;
+                    this.drawBlock(tetro.x+x, tetro.y+y, r, g, b);
                 }
             }
         
@@ -362,13 +373,14 @@ class Renderer{
     drawShadow(tetro) {
         let [r, g, b] = tetro.color;
         this.context.fillStyle = `rgba(${r}, ${g}, ${b}, 0.3)`;
+        this.context.strokeStyle = `rgba(0, 0, 0, 0.1)`;
         let shadowY = 0;
         while (game.canMove(0, shadowY + 1)) shadowY += 1;
         for (let y = 0; y < tetro.shape.length; y++) {
             for (let x = 0; x < tetro.shape[y].length; x++) {
-                if (tetro.shape[y][x] != 0) { // テトロミノの形状配列で1に相当する部分を描画
+                if (tetro.shape[y][x] != 0) { 
                     this.context.fillRect((tetro.x + x) * this.blockSize, (tetro.y + shadowY + y) * this.blockSize, this.blockSize, this.blockSize);
-                    this.context.strokeRect((tetro.x + x) * this.blockSize, (tetro.y + shadowY + y) * this.blockSize, this.blockSize, this.blockSize); // ブロックの枠線を描画
+                    this.context.strokeRect((tetro.x + x) * this.blockSize, (tetro.y + shadowY + y) * this.blockSize, this.blockSize, this.blockSize);
                 }
             }
         }
@@ -427,6 +439,7 @@ class Renderer{
         }
     }
 }
+
 
 
 function displayNone(ele) {
@@ -517,6 +530,6 @@ document.onkeydown = function(e) {
     }
     game.renderer.clear();
     game.renderer.drawField(game.field);
-    game.renderer.drawTetromino(game.currentTetromino);
     game.renderer.drawShadow(game.currentTetromino);
+    game.renderer.drawTetromino(game.currentTetromino);
 }
