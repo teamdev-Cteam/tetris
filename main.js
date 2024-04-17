@@ -539,15 +539,6 @@ function gameStart() {
     game.start();
 }
 
-function login() {
-    let userName = config.loginPage.querySelectorAll("input")[0].value;
-    if (userName == "") {
-        alert("Please put your name");
-    } else {
-        switchPage(config.loginPage, config.initialPage);
-    }
-}
-
 function startPause() {
     game.startStop();
 }
