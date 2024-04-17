@@ -1,3 +1,9 @@
+const config = {
+    loginPage: document.getElementById('loginPage'),
+    initialPage : document.getElementById("initialPage"),
+    mainPage : document.getElementById("mainPage"),
+}
+
 class Game {
     constructor(){
         this.field = new Field(20, 10);
@@ -6,9 +12,10 @@ class Game {
         this.isGameOver = false;
         this.gameInterval = null;
         this.renderer = this.initRenderer();
-        this.doPause = true;
+        this.doPause = false;
         this.startTime = Date.now();
         this.scoreManager = new ScoreManager();
+        this.stopTime = 0;
     }
 
     generateNextTetros(){
@@ -23,8 +30,13 @@ class Game {
     initRenderer(){
         const canvas = document.getElementById("canvas");
         const context = canvas.getContext("2d");
-        return new Renderer(canvas, context); 
-
+        const nextCanvas = document.getElementById("nextTetro");
+        const nextContext = nextCanvas.getContext("2d");
+        const next3Canvas = document.getElementById("next3Tetro");
+        const next3Context = next3Canvas.getContext("2d");
+        const holdCanvas = document.getElementById("holdTetro");
+        const holdContext = holdCanvas.getContext("2d");
+        return new Renderer(canvas, context, nextCanvas, nextContext, next3Canvas, next3Context, holdCanvas, holdContext); 
     }
 
     generateNewTetromino(){
@@ -38,7 +50,6 @@ class Game {
     }
 
     update(){
-
         this.displayTime();
 
         this.checkGameOver();
@@ -52,6 +63,7 @@ class Game {
         this.renderer.clear();
         this.renderer.drawField(this.field);
         this.renderer.drawShadow(this.currentTetromino);
+        this.renderer.drawNextTetros(this.nextTetros);
         this.renderer.drawTetromino(this.currentTetromino);
         this.moveTetro();
         let linesCleared = this.field.clearLines();
@@ -100,18 +112,27 @@ class Game {
         return true;
     }
 
-
     startStop() {
-        if (this.doPause) {
+        if (!this.doPause) {
             clearInterval(this.gameInterval);
-            this.doPause = false;
+            this.gameInterval = null;
+            this.stopTime += (Date.now() - this.startTime);
+            this.doPause = true;
+            restartPauseBtn.innerHTML = `Restart`;
+            restartPauseBtn.disabled = true;
+            restartPauseBtn.disabled = false;
             return;
         }
-        this.doPause = true;
+        this.doPause = false;
+        restartPauseBtn.innerHTML = `Pause`;
+        restartPauseBtn.disabled = true;
+        restartPauseBtn.disabled = false;
+        this.startTime = Date.now();
         this.gameInterval = setInterval(() => this.update(), 500);
     }
+
     displayTime() {
-        const currentTime = new Date(Date.now() - this.startTime);
+        const currentTime = new Date(Date.now() - this.startTime + this.stopTime);
         const h = String(currentTime.getHours()-9).padStart(2, '0');
         const m = String(currentTime.getMinutes()).padStart(2, '0');
         const s = String(currentTime.getSeconds()).padStart(2, '0');
@@ -348,12 +369,34 @@ class ScoreManager {
 }
 
 class Renderer{
-    constructor(canvas, context){
+    constructor(canvas, context, nextCanvas, nextContext, next3Canvas, next3Context, holdCanvas, holdContext){
         this.canvas = canvas;
         this.context = context;
         this.blockSize = 27;
         this.canvas.width = this.blockSize * 10;
         this.canvas.height = this.blockSize * 20;
+
+        this.canvas.style.backgroundColor = "gray";
+
+        this.miniWidth = 5; 
+
+        this.nextCanvas = nextCanvas;
+        this.nextContext = nextContext;
+        this.nextCanvas.width = this.blockSize * this.miniWidth;
+        this.nextCanvas.height = this.blockSize * 4;
+        this.nextCanvas.style.backgroundColor = `rgb(64, 64, 64)`;
+
+        this.next3Canvas = next3Canvas;
+        this.next3Context = next3Context;
+        this.next3Canvas.width = this.blockSize * this.miniWidth;
+        this.next3Canvas.height = this.blockSize * 10;
+        this.next3Canvas.style.backgroundColor = `rgb(64, 64, 64)`;
+
+        this.holdCanvas = holdCanvas;
+        this.holdContext = holdContext;
+        this.holdCanvas.width = this.blockSize * this.miniWidth;
+        this.holdCanvas.height = this.blockSize * 4;
+        this.holdCanvas.style.backgroundColor = `rgb(64, 64, 64)`;
     }
 
     clear(){
@@ -415,22 +458,131 @@ class Renderer{
             }
         }
     }
+
+    drawNextTetros(nextTetros) {
+        this.nextContext.clearRect(0, 0, this.nextCanvas.width, this.nextCanvas.height)
+        let [r, g, b] = nextTetros[0].color;
+        this.nextContext.fillStyle = `rgba(${r}, ${g}, ${b})`;
+        for (let y = 0; y < nextTetros[0].shape.length; y++) {
+            for (let x = 0; x < nextTetros[0].shape[y].length; x++) {
+                if (nextTetros[0].shape[y][x] != 0) {
+                    this.nextContext.fillRect((x + (this.miniWidth - nextTetros[0].shape[y].length) / 2) * this.blockSize, (y + (4 - nextTetros[0].shape.length) / 2 + 0.5) * this.blockSize, this.blockSize, this.blockSize);
+                    this.nextContext.strokeRect((x + (this.miniWidth - nextTetros[0].shape[y].length) / 2) * this.blockSize, (y + (4 - nextTetros[0].shape.length) / 2 + 0.5) * this.blockSize, this.blockSize, this.blockSize);
+                }
+            }
+        }
+
+        this.next3Context.clearRect(0, 0, this.next3Canvas.width, this.next3Canvas.height);
+        for (let i = 1; i <= 3; i++) {
+            [r, g, b] = nextTetros[i].color;
+            this.next3Context.fillStyle = `rgba(${r}, ${g}, ${b})`;
+            for (let y = 0; y < nextTetros[i].shape.length; y++) {
+                for (let x = 0; x < nextTetros[i].shape[y].length; x++) {
+                    if (nextTetros[i].shape[y][x] != 0) {
+                        this.next3Context.fillRect((x + (this.miniWidth - nextTetros[i].shape[y].length) / 2) * this.blockSize, (y + (i-1)*3 + 1) * this.blockSize, this.blockSize, this.blockSize);
+                        this.next3Context.strokeRect((x + (this.miniWidth - nextTetros[i].shape[y].length) / 2) * this.blockSize, (y + (i-1)*3 + 1) * this.blockSize, this.blockSize, this.blockSize);
+                    }
+                }
+            }
+        }
+    }
+
+    drawHoldTetro(holdTetro) {
+        let maxW = 0;
+        let h = 0;
+        for (let y = 0; y < holdTetro.shape.length; y++) {
+            let w = 0;
+            for (let x = 0; x < holdTetro.shape[y].length; x++) {
+                if (holdTetro.shape[y][x] != 0) w++;
+            }
+            if (w > maxW) maxW = w;
+            if (w != 0) h++;
+        }
+
+        this.holdContext.clearRect(0, 0, this.holdCanvas.width, this.holdCanvas.height);
+        let [r, g, b] = holdTetro.color;
+        this.holdContext.fillStyle = `rgba(${r}, ${g}, ${b})`;
+        for (let y = 0; y < holdTetro.shape.length; y++) {
+            for (let x = 0; x < holdTetro.shape[y].length; x++) {
+                if (holdTetro.shape[y][x] != 0) {
+                    this.holdContext.fillRect((x + (this.miniWidth - maxW) / 2) * this.blockSize, (y + (4 - h) / 2) * this.blockSize, this.blockSize, this.blockSize);
+                    this.holdContext.strokeRect((x + (this.miniWidth - maxW) / 2) * this.blockSize, (y + (4 - h) / 2) * this.blockSize, this.blockSize, this.blockSize);
+                }
+            }
+        }
+    }
 }
 
 
+
+function displayNone(ele) {
+    ele.classList.remove("d-block");
+    ele.classList.add("d-none");
+}
+
+function displayBlock(ele) {
+    ele.classList.remove("d-none");
+    ele.classList.add("d-block");
+}
+
+function switchPage(page1, page2) {
+    displayNone(page1);
+    displayBlock(page2);
+}
+
+let game;
+
 function gameStart() {
+    switchPage(config.initialPage, config.mainPage);
     game = new Game();
     console.log("gameStart");
     game.start();
 }
 
-let game;
-gameStart();
+function login() {
+    let userName = config.loginPage.querySelectorAll("input")[0].value;
+    if (userName == "") {
+        alert("Please put your name");
+    } else {
+        switchPage(config.loginPage, config.initialPage);
+    }
+}
 
+function startPause() {
+    game.startStop();
+}
 
+const restartPauseBtn = document.getElementById("restartPauseBtn");
+
+function moveInitialPage() {
+    switchPage(config.mainPage, config.initialPage);
+}
+
+const resetBtn = document.getElementById("resetBtn");
+function resetAllData() {
+    if (!game.doPause) startPause();
+    resetBtn.disabled = true;
+    resetBtn.disabled = false;
+    if (window.confirm("Reset All Data?")) {
+        gameStart();
+        restartPauseBtn.innerHTML = `Pause`;
+    }
+}
+
+const backBtn = document.getElementById("backBtn");
+function backPage() {
+    if (!game.doPause) startPause();
+    backBtn.disabled = true;
+    backBtn.disabled = false;
+    if (window.confirm("Back Page?")) {
+        moveInitialPage();
+        restartPauseBtn.innerHTML = `Pause`;
+    }
+}
 
 document.onkeydown = function(e) {
     if (game.isGameOver) return;
+    if (game.doPause) return;
     switch(e.key) {
         case "ArrowLeft":
             if (game.canMove(-1, 0)) game.currentTetromino.x--;
