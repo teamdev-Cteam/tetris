@@ -70,6 +70,7 @@ class Game {
         if (linesCleared > 0) {
             this.scoreManager.incrementLinesCleared(linesCleared);
             this.scoreManager.incrementCombo();
+            currentScore.innerHTML = this.scoreManager.score;
         } else {
             this.scoreManager.initCombo();
         }
@@ -417,7 +418,6 @@ class Renderer{
     }
 
     drawField(field){
- 
         for (let y = 0; y < field.rows; y++) {
             for (let x = 0; x < field.cols; x++) {
                 let colorCode = field.grid[y][x];
@@ -570,6 +570,8 @@ function backPage() {
         restartPauseBtn.innerHTML = `Pause`;
     }
 }
+
+const currentScore = document.getElementById("score");
 
 document.onkeydown = function(e) {
     if (game.isGameOver) return;
