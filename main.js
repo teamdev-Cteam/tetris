@@ -460,27 +460,45 @@ class Renderer{
     }
 
     drawNextTetros(nextTetros) {
-        this.nextContext.clearRect(0, 0, this.nextCanvas.width, this.nextCanvas.height)
-        let [r, g, b] = nextTetros[0].color;
-        this.nextContext.fillStyle = `rgba(${r}, ${g}, ${b})`;
+        let h = 0;
         for (let y = 0; y < nextTetros[0].shape.length; y++) {
             for (let x = 0; x < nextTetros[0].shape[y].length; x++) {
                 if (nextTetros[0].shape[y][x] != 0) {
-                    this.nextContext.fillRect((x + (this.miniWidth - nextTetros[0].shape[y].length) / 2) * this.blockSize, (y + (4 - nextTetros[0].shape.length) / 2 + 0.5) * this.blockSize, this.blockSize, this.blockSize);
-                    this.nextContext.strokeRect((x + (this.miniWidth - nextTetros[0].shape[y].length) / 2) * this.blockSize, (y + (4 - nextTetros[0].shape.length) / 2 + 0.5) * this.blockSize, this.blockSize, this.blockSize);
+                    h++;
+                    break;
                 }
             }
+        }
+        h = 2 - (h / 2);
+
+        this.nextContext.clearRect(0, 0, this.nextCanvas.width, this.nextCanvas.height)
+        let [r, g, b] = nextTetros[0].color;
+        for (let y = 0; y < nextTetros[0].shape.length; y++) {
+            let flag = false;
+            for (let x = 0; x < nextTetros[0].shape[y].length; x++) {
+                if (nextTetros[0].shape[y][x] != 0) {
+                    this.nextContext.fillStyle = `rgba(${r}, ${g}, ${b})`;
+                    this.nextContext.fillRect((x + (this.miniWidth - nextTetros[0].shape[y].length) / 2) * this.blockSize, h * this.blockSize, this.blockSize, this.blockSize);
+                    this.nextContext.strokeRect((x + (this.miniWidth - nextTetros[0].shape[y].length) / 2) * this.blockSize, h * this.blockSize, this.blockSize, this.blockSize);
+                    this.nextContext.fillStyle = `rgba(0, 0, 0, 0.2)`;
+                    this.nextContext.fillRect((x + (this.miniWidth - nextTetros[0].shape[y].length) / 2) * this.blockSize + 5, h * this.blockSize + 5, this.blockSize, this.blockSize);
+                    flag = true;
+                }
+            }
+            if (flag) h++;
         }
 
         this.next3Context.clearRect(0, 0, this.next3Canvas.width, this.next3Canvas.height);
         for (let i = 1; i <= 3; i++) {
             [r, g, b] = nextTetros[i].color;
-            this.next3Context.fillStyle = `rgba(${r}, ${g}, ${b})`;
             for (let y = 0; y < nextTetros[i].shape.length; y++) {
                 for (let x = 0; x < nextTetros[i].shape[y].length; x++) {
                     if (nextTetros[i].shape[y][x] != 0) {
+                        this.next3Context.fillStyle = `rgba(${r}, ${g}, ${b})`;
                         this.next3Context.fillRect((x + (this.miniWidth - nextTetros[i].shape[y].length) / 2) * this.blockSize, (y + (i-1)*3 + 1) * this.blockSize, this.blockSize, this.blockSize);
                         this.next3Context.strokeRect((x + (this.miniWidth - nextTetros[i].shape[y].length) / 2) * this.blockSize, (y + (i-1)*3 + 1) * this.blockSize, this.blockSize, this.blockSize);
+                        this.next3Context.fillStyle = `rgba(0, 0, 0, 0.2)`;
+                        this.next3Context.fillRect((x + (this.miniWidth - nextTetros[i].shape[y].length) / 2) * this.blockSize + 5, (y + (i-1)*3 + 1) * this.blockSize + 5, this.blockSize, this.blockSize);
                     }
                 }
             }
@@ -488,27 +506,32 @@ class Renderer{
     }
 
     drawHoldTetro(holdTetro) {
-        let maxW = 0;
         let h = 0;
-        for (let y = 0; y < holdTetro.shape.length; y++) {
-            let w = 0;
-            for (let x = 0; x < holdTetro.shape[y].length; x++) {
-                if (holdTetro.shape[y][x] != 0) w++;
+        for (let y = 0; y < nextTetros[0].shape.length; y++) {
+            for (let x = 0; x < nextTetros[0].shape[y].length; x++) {
+                if (nextTetros[0].shape[y][x] != 0) {
+                    h++;
+                    break;
+                }
             }
-            if (w > maxW) maxW = w;
-            if (w != 0) h++;
         }
+        h = 2 - (h / 2);
 
         this.holdContext.clearRect(0, 0, this.holdCanvas.width, this.holdCanvas.height);
         let [r, g, b] = holdTetro.color;
-        this.holdContext.fillStyle = `rgba(${r}, ${g}, ${b})`;
         for (let y = 0; y < holdTetro.shape.length; y++) {
+            let flag = false;
             for (let x = 0; x < holdTetro.shape[y].length; x++) {
                 if (holdTetro.shape[y][x] != 0) {
-                    this.holdContext.fillRect((x + (this.miniWidth - maxW) / 2) * this.blockSize, (y + (4 - h) / 2) * this.blockSize, this.blockSize, this.blockSize);
-                    this.holdContext.strokeRect((x + (this.miniWidth - maxW) / 2) * this.blockSize, (y + (4 - h) / 2) * this.blockSize, this.blockSize, this.blockSize);
+                    this.holdContext.fillStyle = `rgba(${r}, ${g}, ${b})`;
+                    this.holdContext.fillRect((x + (this.miniWidth - holdTetro.shape[y].length) / 2) * this.blockSize, h * this.blockSize, this.blockSize, this.blockSize);
+                    this.holdContext.strokeRect((x + (this.miniWidth - holdTetro.shape[y].length) / 2) * this.blockSize, h * this.blockSize, this.blockSize, this.blockSize);
+                    this.holdContext.fillStyle = `rgba(0, 0, 0, 0.2)`;
+                    this.holdContext.fillRect((x + (this.miniWidth - holdTetro.shape[y].length) / 2) * this.blockSize + 5, h * this.blockSize + 5, this.blockSize, this.blockSize);
+                    flag = true;
                 }
             }
+            if (flag) h++;
         }
     }
 }
