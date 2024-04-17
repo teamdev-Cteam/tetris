@@ -14,6 +14,7 @@ class Game {
         this.renderer = this.initRenderer();
         this.doPause = false;
         this.startTime = Date.now();
+        this.scoreManager = new ScoreManager();
         this.stopTime = 0;
     }
 
@@ -65,7 +66,13 @@ class Game {
         this.renderer.drawNextTetros(this.nextTetros);
         this.renderer.drawTetromino(this.currentTetromino);
         this.moveTetro();
-        this.field.clearLines();
+        let linesCleared = this.field.clearLines();
+        if (linesCleared > 0) {
+            this.scoreManager.incrementLinesCleared(linesCleared);
+            this.scoreManager.incrementCombo();
+        } else {
+            this.scoreManager.initCombo();
+        }
         
     }
 
@@ -74,7 +81,6 @@ class Game {
             this.field.addTetromino(this.currentTetromino);
             this.currentTetromino = this.nextTetros.shift(0);
             this.nextTetros.push(this.generateNewTetromino());
-            console.log(this.nextTetros);
             return;
         }
         this.currentTetromino.y += 1;
@@ -215,6 +221,8 @@ class Tetromino {
         const shapes = Object.keys(this.tetrominoShapes);
         const randomShape = shapes[Math.floor(Math.random() * shapes.length)];
         return this.tetrominoShapes[randomShape];
+        // テスト用
+        // return this.tetrominoShapes["I"];
     }
     
 
@@ -293,6 +301,71 @@ class Field {
     }
 
 
+}
+
+class ScoreManager {
+    constructor() {
+        this.score = 0;
+        this.level = 1;
+        this.linesCleared = 0;
+        this.combo = 0;
+    }
+
+    // perfect Clear, Combo, Line, HardSoftDrop, Gravity, level;
+
+    addScore(linesCleared) {
+        const scores = {1: 100, 2: 300, 3: 500, 4 : 800};
+        this.score += scores[linesCleared];
+        console.log("SCORE");
+        console.log(this.score);
+    }
+
+    updateLevel() {
+        const linesPerLevel = 10;
+        if (this.level <= 10) {
+            if (this.linesCleared >= linesPerLevel * this.level) {
+                this.level++;
+                this.linesCleared = 0;
+                console.log("LEVEL");
+                console.log(this.level);
+            }
+        } else {
+            if  (this.linesCleared >= 100) {
+                this.level++;
+                this.linesCleared = 0;
+                console.log("LEVEL");
+                console.log(this.level);
+            }
+        }
+
+    }
+
+    incrementLinesCleared(count) {
+        this.linesCleared += count;
+        this.addScore(count);
+        this.updateLevel();
+    }
+
+    getScore() {
+        return this.score;
+    }
+
+    getLevel() {
+        return this.level;
+    }
+
+    initCombo() {
+        this.combo = 0;
+    }
+
+    incrementCombo() {
+        this.combo += 1;
+        console.log("COMBO前");
+        console.log(this.score);
+        this.score += this.combo * 50;
+        console.log("COMBO後");
+        console.log(this.score);
+    }
 }
 
 class Renderer{
