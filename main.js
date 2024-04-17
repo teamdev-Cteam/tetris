@@ -9,6 +9,8 @@ class Game {
         this.field = new Field(20, 10);
         this.currentTetromino = this.generateNewTetromino();
         this.nextTetros = this.generateNextTetros();
+        this.holdTetromino = null;
+        this.hasHeld = false;
         this.isGameOver = false;
         this.gameInterval = null;
         this.renderer = this.initRenderer();
@@ -43,6 +45,38 @@ class Game {
         return new Tetromino();
     }
 
+    changeTetromino(){
+        // canMove見る
+
+        if (this.hasHeld) return;
+        
+        let currentX = this.currentTetromino.x;
+        let currentY = this.currentTetromino.y;
+        
+
+        if (this.holdTetromino == null){
+            if (!this.canMove(0, 0, this.nextTetros[0].shape)) return; 
+            this.currentTetromino.initializeShape();
+            this.holdTetromino = this.currentTetromino;
+            this.currentTetromino = this.nextTetros.shift(0);
+            this.currentTetromino.x = currentX;
+            this.currentTetromino.y = currentY;
+            this.nextTetros.push(this.generateNewTetromino());
+            this.hasHeld = true;
+
+            return;
+        }
+
+        // holdTetrominoが既にあるならholdとcurrentを入れ替える
+        if (!this.canMove(0, 0, this.holdTetromino.shape)) return;
+        this.currentTetromino.initializeShape(); 
+        let tmp = this.currentTetromino;
+        this.currentTetromino = this.holdTetromino;
+        this.holdTetromino = tmp;
+        this.currentTetromino.x = currentX;
+        this.currentTetromino.y = currentY;
+        this.hasHeld = true;
+    }
     start(){
         this.isGameOver = false;
         this.update();
@@ -64,6 +98,7 @@ class Game {
         this.renderer.drawField(this.field);
         this.renderer.drawShadow(this.currentTetromino);
         this.renderer.drawNextTetros(this.nextTetros);
+        this.renderer.drawHoldTetro(this.holdTetromino);
         this.renderer.drawTetromino(this.currentTetromino);
         this.moveTetro();
         let linesCleared = this.field.clearLines();
@@ -145,91 +180,92 @@ class Game {
 }
 
 class Tetromino {
+
+    static TETROMINO_SHAPES = {
+        'T': {
+            shape: [
+                [0, 1, 0],
+                [1, 1, 1],
+                [0, 0, 0]
+            ],
+            color: [191, 127, 255],
+            startX: 4
+        },
+        'L': {
+            shape: [
+                [0, 0, 2],
+                [2, 2, 2],
+                [0, 0, 0],
+            ],
+            color: [255,191,127],
+            startX: 4
+        },
+        'I': {
+            shape: [
+                [0, 0, 0, 0],
+                [3, 3, 3, 3],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0]
+            ],
+            color: [127,255,255],
+            startX: 3
+        },
+        'O': {
+            shape: [
+                [4, 4],
+                [4, 4]
+            ],
+            color: [255,255,127],
+            startX: 4
+        },
+        'S': {
+            shape: [
+                [0, 5, 5],
+                [5, 5, 0],
+                [0, 0, 0]
+            ],
+            color: [127,255,127],
+            startX: 3
+        },
+        'J': {
+            shape: [
+                [6, 0, 0],
+                [6, 6, 6],
+                [0, 0, 0]
+            ],
+            color: [127,191,255],
+            startX: 3
+        },
+        'Z': {
+            shape: [
+                [7, 7, 0],
+                [0, 7, 7],
+                [0, 0, 0]
+            ],
+            color: [255,127,127],
+            startX: 3
+        }
+    };
+    
     constructor() {
-        this.tetrominoShapes = {
-            'T': {
-                shape: [
-                    [0, 1, 0],
-                    [1, 1, 1],
-                    [0, 0, 0]
-                ],
-                color: [191, 127, 255],
-                startX: 4
-            },
-            'L': {
-                shape: [
-                    [0, 0, 2],
-                    [2, 2, 2],
-                    [0, 0, 0],
-                ],
-                color: [255,191,127],
-                startX: 4
-            },
-            'I': {
-                shape: [
-                    [0, 0, 0, 0],
-                    [3, 3, 3, 3],
-                    [0, 0, 0, 0],
-                    [0, 0, 0, 0]
-                ],
-                color: [127,255,255],
-                startX: 3
-            },
-            'O': {
-                shape: [
-                    [4, 4],
-                    [4, 4]
-                ],
-                color: [255,255,127],
-                startX: 4
-            },
-            'S': {
-                shape: [
-                    [0, 5, 5],
-                    [5, 5, 0],
-                    [0, 0, 0]
-                ],
-                color: [127,255,127],
-                startX: 3
-            },
-            'J': {
-                shape: [
-                    [6, 0, 0],
-                    [6, 6, 6],
-                    [0, 0, 0]
-                ],
-                color: [127,191,255],
-                startX: 3
-            },
-            'Z': {
-                shape: [
-                    [7, 7, 0],
-                    [0, 7, 7],
-                    [0, 0, 0]
-                ],
-                color: [255,127,127],
-                startX: 3
-            }
-        };
+
         const tetroInfo = this.getRandomTetrominoShape();
         this.shape = tetroInfo.shape;
+        this.originalShape = this.shape;
         this.color = tetroInfo.color;
         this.x = tetroInfo.startX;
         this.y = 0;
     }
 
     getRandomTetrominoShape() {
-        const shapes = Object.keys(this.tetrominoShapes);
+        const shapes = Object.keys(Tetromino.TETROMINO_SHAPES);
         const randomShape = shapes[Math.floor(Math.random() * shapes.length)];
-        return this.tetrominoShapes[randomShape];
+        return Tetromino.TETROMINO_SHAPES[randomShape];
         // テスト用
         // return this.tetrominoShapes["I"];
     }
-    
-
-    move(dx, dy){
-        this.x += dx;
-        this.y += dy;
+    initializeShape(){
+        this.shape = this.originalShape;
     }
 
     rotate() {
@@ -272,6 +308,7 @@ class Field {
                 }
             }
         }
+        game.hasHeld = false;
         
     }
 
@@ -488,6 +525,7 @@ class Renderer{
     }
 
     drawHoldTetro(holdTetro) {
+        if (game.holdTetromino == null) return;
         let maxW = 0;
         let h = 0;
         for (let y = 0; y < holdTetro.shape.length; y++) {
@@ -593,6 +631,10 @@ document.onkeydown = function(e) {
         case " ":
             while (game.canMove(0, 1)) game.currentTetromino.y++;
             break; 
+        case "Shift":
+            game.changeTetromino();
+            break;
+
     }
     game.renderer.clear();
     game.renderer.drawField(game.field);
