@@ -46,14 +46,10 @@ class Game {
     }
 
     changeTetromino(){
-        // canMove見る
 
         if (this.hasHeld) return;
-        
         let currentX = this.currentTetromino.x;
         let currentY = this.currentTetromino.y;
-        
-
         if (this.holdTetromino == null){
             if (!this.canMove(0, 0, this.nextTetros[0].shape)) return; 
             this.currentTetromino.initializeShape();
@@ -63,11 +59,9 @@ class Game {
             this.currentTetromino.y = currentY;
             this.nextTetros.push(this.generateNewTetromino());
             this.hasHeld = true;
-
             return;
         }
 
-        // holdTetrominoが既にあるならholdとcurrentを入れ替える
         if (!this.canMove(0, 0, this.holdTetromino.shape)) return;
         this.currentTetromino.initializeShape(); 
         let tmp = this.currentTetromino;
