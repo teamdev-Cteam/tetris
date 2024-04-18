@@ -79,6 +79,8 @@ class Game {
 
     moveTetro() {
         if (!this.canMove(0, 1)) {
+            this.scoreManager.score++;
+            console.log(this.scoreManager.score);
             this.field.addTetromino(this.currentTetromino);
             this.currentTetromino = this.nextTetros.shift(0);
             this.nextTetros.push(this.generateNewTetromino());
@@ -307,7 +309,7 @@ class ScoreManager {
         this.combo = 0;
     }
 
-    // perfect Clear, Combo, Line, HardSoftDrop, Gravity, level;
+    // perfect Clear,HardSoftDrop;
 
     addScore(linesCleared) {
         const scores = {1: 100, 2: 300, 3: 500, 4 : 800};
@@ -605,6 +607,7 @@ document.onkeydown = function(e) {
             break;
         case " ":
             while (game.canMove(0, 1)) game.currentTetromino.y++;
+            game.scoreManager.score++;
             break; 
     }
     game.renderer.clear();
