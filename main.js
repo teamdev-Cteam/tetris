@@ -69,6 +69,9 @@ class Game {
             this.scoreManager.incrementLinesCleared(linesCleared);
             this.scoreManager.updateLevel();
             this.scoreManager.incrementCombo();
+            if (this.field.isClear()){
+                this.scoreManager.perfectClear(linesCleared);
+            }
         } else {
             this.scoreManager.initCombo();
         }
@@ -223,9 +226,9 @@ class Tetromino {
     getRandomTetrominoShape() {
         const shapes = Object.keys(this.tetrominoShapes);
         const randomShape = shapes[Math.floor(Math.random() * shapes.length)];
-        return this.tetrominoShapes[randomShape];
+        // return this.tetrominoShapes[randomShape];
         // テスト用
-        // return this.tetrominoShapes["I"];
+        return this.tetrominoShapes["I"];
     }
     
 
@@ -272,6 +275,16 @@ class Field {
         
     }
 
+    isClear() {
+        for (let y = 0; y < this.rows; y++) {
+            for (let x = 0; x < this.cols; x++) {
+                if (this.grid[y][x] != 0) return false;
+            }
+        }
+
+        return true;
+    }
+
     clearLines() {
         let linesCleared = 0;
     
@@ -309,7 +322,17 @@ class ScoreManager {
         this.combo = 0;
     }
 
-    // perfect Clear,HardSoftDrop;
+    // perfect Clear;
+    perfectClear(linesCleared) {
+        if (linesCleared == 1) this.score += 900;
+        if (linesCleared == 2) this.score += 1500;
+        if (linesCleared == 3) this.score += 2300;
+        if (linesCleared == 4) {
+            this.score += 2800;
+            console.log("call 2800");
+        }
+        
+    }
 
     addScore(linesCleared) {
         const scores = {1: 100, 2: 300, 3: 500, 4 : 800};
