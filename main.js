@@ -338,7 +338,7 @@ class ScoreManager {
                 console.log(this.level);
             }
         }
-
+        currentLevel.innerHTML = this.level;
     }
 
     incrementLinesCleared(count) {
@@ -595,6 +595,7 @@ function backPage() {
     }
 }
 
+const currentLevel = document.getElementById("level");
 const currentScore = document.getElementById("score");
 
 document.onkeydown = function(e) {
@@ -622,4 +623,52 @@ document.onkeydown = function(e) {
     game.renderer.drawField(game.field);
     game.renderer.drawShadow(game.currentTetromino);
     game.renderer.drawTetromino(game.currentTetromino);
+}
+
+
+const titleTetro =
+[
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 1, 1, 1, 1, 1, 0, 2, 2, 2, 2, 0, 3, 3, 3, 3, 3, 0, 4, 4, 4, 4, 0, 0, 5, 0, 0, 6, 6, 6, 0, 0],
+    [0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 4, 0, 0, 0, 4, 0, 5, 0, 6, 0, 0, 0, 6, 0],
+    [0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 4, 0, 0, 0, 4, 0, 5, 0, 6, 0, 0, 0, 0, 0],
+    [0, 0, 0, 1, 0, 0, 0, 2, 2, 2, 2, 0, 0, 0, 3, 0, 0, 0, 4, 4, 4, 4, 0, 0, 5, 0, 0, 6, 6, 6, 0, 0],
+    [0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 4, 0, 4, 0, 0, 0, 5, 0, 0, 0, 0, 0, 6, 0],
+    [0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 4, 0, 0, 4, 0, 0, 5, 0, 6, 0, 0, 0, 6, 0],
+    [0, 0, 0, 1, 0, 0, 0, 2, 2, 2, 2, 0, 0, 0, 3, 0, 0, 0, 4, 0, 0, 0, 4, 0, 5, 0, 0, 6, 6, 6, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+];
+const titleColor = {0:[64, 64, 64], 1:[255,127,127], 2:[255,191,127], 3:[255,255,127], 4:[127,255,127], 5:[127,191,255], 6:[191, 127, 255]};
+const titleBlockSize = 25;
+const titleMiniBlockSize = 10;
+
+const titleCanvas = document.getElementById("title");
+const titleContext = titleCanvas.getContext("2d");
+titleCanvas.width = titleBlockSize * titleTetro[0].length;
+titleCanvas.height = titleBlockSize * titleTetro.length;
+titleCanvas.style.backgroundColor = `rgb(64, 64, 64)`;
+
+const titleMiniCanvas = document.getElementById("mini-title");
+const titleMiniContext = titleMiniCanvas.getContext("2d");
+titleMiniCanvas.width = titleMiniBlockSize * titleTetro[0].length;
+titleMiniCanvas.height = titleMiniBlockSize * titleTetro.length;
+titleMiniCanvas.style.backgroundColor = `rgb(64, 64, 64)`;
+
+drawTitle(titleContext, titleBlockSize);
+drawTitle(titleMiniContext, titleMiniBlockSize);
+
+function drawTitle(targetContext ,blockSize) {
+    for (let y = 0; y < titleTetro.length; y++) {
+        for (let x = 0; x < titleTetro[0].length; x++) {
+            if (titleTetro[y][x] != 0) {
+                let [r, g, b] = titleColor[titleTetro[y][x]];
+                targetContext.fillStyle = `rgba(${r}, ${g}, ${b})`;
+                targetContext.fillRect(x * blockSize, y * blockSize, blockSize, blockSize);
+                // targetContext.strokeStyle = `rgba(0, 0, 0, 1)`;
+                targetContext.strokeRect(x * blockSize, y * blockSize, blockSize, blockSize);
+                targetContext.fillStyle = `rgba(0, 0, 0, 0.2)`;
+                targetContext.fillRect(x * blockSize + 5, y * blockSize + 5, blockSize, blockSize);
+            }
+        }
+    }
 }
