@@ -63,12 +63,12 @@ class Game {
         this.renderer.drawNextTetros(this.nextTetros);
         this.renderer.drawTetromino(this.currentTetromino);
         this.moveTetro();
+        currentScore.innerHTML = this.scoreManager.score;
         let linesCleared = this.field.clearLines();
         if (linesCleared > 0) {
             this.scoreManager.incrementLinesCleared(linesCleared);
             this.scoreManager.updateLevel();
             this.scoreManager.incrementCombo();
-            currentScore.innerHTML = this.scoreManager.score;
         } else {
             this.scoreManager.initCombo();
         }
