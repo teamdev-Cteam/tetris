@@ -10,12 +10,12 @@ class Game {
         this.currentTetromino = this.generateNewTetromino();
         this.nextTetros = this.generateNextTetros();
         this.isGameOver = false;
-        this.gameInterval = null;
         this.renderer = this.initRenderer();
         this.doPause = false;
         this.startTime = Date.now();
         this.scoreManager = new ScoreManager();
         this.stopTime = 0;
+        this.updateInterval = 870;
     }
 
     generateNextTetros(){
@@ -46,7 +46,6 @@ class Game {
     start(){
         this.isGameOver = false;
         this.update();
-        this.gameInterval = setInterval(() => this.update(), 500);
     }
 
     update(){
@@ -54,8 +53,6 @@ class Game {
 
         this.checkGameOver();
         if (this.isGameOver){
-            clearInterval(this.gameInterval);
-            console.log("Game Over");
             return;
         }
 
@@ -69,11 +66,14 @@ class Game {
         let linesCleared = this.field.clearLines();
         if (linesCleared > 0) {
             this.scoreManager.incrementLinesCleared(linesCleared);
+            this.scoreManager.updateLevel();
             this.scoreManager.incrementCombo();
             currentScore.innerHTML = this.scoreManager.score;
         } else {
             this.scoreManager.initCombo();
         }
+
+        setTimeout(() => this.update(), this.updateInterval);
         
     }
 
@@ -227,11 +227,6 @@ class Tetromino {
     }
     
 
-    move(dx, dy){
-        this.x += dx;
-        this.y += dy;
-    }
-
     rotate() {
         let newTetro = [];
         for (let y = 0; y < this.shape.length; y++) {
@@ -317,25 +312,25 @@ class ScoreManager {
     addScore(linesCleared) {
         const scores = {1: 100, 2: 300, 3: 500, 4 : 800};
         this.score += scores[linesCleared];
-        console.log("SCORE");
-        console.log(this.score);
+
+    }
+
+    addLevel() {
+        if (this.level < 20) game.updateInterval -= 35;
+        this.level++;
     }
 
     updateLevel() {
         const linesPerLevel = 10;
         if (this.level <= 10) {
             if (this.linesCleared >= linesPerLevel * this.level) {
-                this.level++;
+                this.addLevel();
                 this.linesCleared = 0;
-                console.log("LEVEL");
-                console.log(this.level);
             }
         } else {
             if  (this.linesCleared >= 100) {
-                this.level++;
+                this.addLevel();
                 this.linesCleared = 0;
-                console.log("LEVEL");
-                console.log(this.level);
             }
         }
 
@@ -344,7 +339,6 @@ class ScoreManager {
     incrementLinesCleared(count) {
         this.linesCleared += count;
         this.addScore(count);
-        this.updateLevel();
     }
 
     getScore() {
@@ -361,11 +355,7 @@ class ScoreManager {
 
     incrementCombo() {
         this.combo += 1;
-        console.log("COMBO前");
-        console.log(this.score);
         this.score += this.combo * 50;
-        console.log("COMBO後");
-        console.log(this.score);
     }
 }
 
@@ -559,7 +549,6 @@ let game;
 function gameStart() {
     switchPage(config.initialPage, config.mainPage);
     game = new Game();
-    console.log("gameStart");
     game.start();
 }
 
