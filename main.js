@@ -389,6 +389,7 @@ class ScoreManager {
     addLevel() {
         if (this.level < 20) game.updateInterval -= 35;
         this.level++;
+        game.sound.levelUp();
     }
 
     updateLevel() {
@@ -405,7 +406,7 @@ class ScoreManager {
             }
         }
         currentLevel.innerHTML = this.level;
-        game.sound.levelUp();
+        
     }
 
     incrementLinesCleared(count) {
