@@ -9,6 +9,8 @@ class Game {
         this.field = new Field(20, 10);
         this.currentTetromino = this.generateNewTetromino();
         this.nextTetros = this.generateNextTetros();
+        this.holdTetromino = null;
+        this.doHold = true;
         this.isGameOver = false;
         this.gameInterval = null;
         this.renderer = this.initRenderer();
@@ -43,6 +45,39 @@ class Game {
         return new Tetromino();
     }
 
+    changeTetromino(){
+
+        if (!this.doHold) {
+            console.log('既にholdしています');
+            return;
+        }
+        let currentX = this.currentTetromino.x;
+        let currentY = this.currentTetromino.y;
+        if (this.holdTetromino == null){
+            if (!this.canMove(0, 0, this.nextTetros[0].shape)) return; 
+            this.currentTetromino.initializeShape();
+            this.holdTetromino = this.currentTetromino;
+            this.currentTetromino = this.nextTetros.shift(0);
+            this.currentTetromino.x = currentX;
+            this.currentTetromino.y = currentY;
+            this.nextTetros.push(this.generateNewTetromino());
+            this.doHold = false;
+            return;
+        }
+
+        if (!this.canMove(0, 0, this.holdTetromino.shape)) {
+            console.log('干渉あり');
+            return;
+        }
+        this.currentTetromino.initializeShape(); 
+        let tmp = this.currentTetromino;
+        this.currentTetromino = this.holdTetromino;
+        this.holdTetromino = tmp;
+        this.currentTetromino.x = currentX;
+        this.currentTetromino.y = currentY;
+        this.doHold = false;
+    }
+
     start(){
         this.isGameOver = false;
         this.update();
@@ -64,6 +99,7 @@ class Game {
         this.renderer.drawField(this.field);
         this.renderer.drawShadow(this.currentTetromino);
         this.renderer.drawNextTetros(this.nextTetros);
+        this.renderer.drawHoldTetro(this.holdTetromino);
         this.renderer.drawTetromino(this.currentTetromino);
         this.moveTetro();
         let linesCleared = this.field.clearLines();
@@ -213,6 +249,7 @@ class Tetromino {
         };
         const tetroInfo = this.getRandomTetrominoShape();
         this.shape = tetroInfo.shape;
+        this.originalShape = this.shape;
         this.color = tetroInfo.color;
         this.x = tetroInfo.startX;
         this.y = 0;
@@ -226,6 +263,9 @@ class Tetromino {
         // return this.tetrominoShapes["I"];
     }
     
+    initializeShape() {
+        this.shape = this.originalShape;
+    }
 
     move(dx, dy){
         this.x += dx;
@@ -272,7 +312,7 @@ class Field {
                 }
             }
         }
-        
+        game.doHold = true;
     }
 
     clearLines() {
@@ -506,10 +546,12 @@ class Renderer{
     }
 
     drawHoldTetro(holdTetro) {
+
+        if (game.holdTetromino == null) return;
         let h = 0;
-        for (let y = 0; y < nextTetros[0].shape.length; y++) {
-            for (let x = 0; x < nextTetros[0].shape[y].length; x++) {
-                if (nextTetros[0].shape[y][x] != 0) {
+        for (let y = 0; y < holdTetro.shape.length; y++) {
+            for (let x = 0; x < holdTetro.shape[y].length; x++) {
+                if (holdTetro.shape[y][x] != 0) {
                     h++;
                     break;
                 }
@@ -617,6 +659,9 @@ document.onkeydown = function(e) {
         case " ":
             while (game.canMove(0, 1)) game.currentTetromino.y++;
             break; 
+        case "Shift":
+            game.changeTetromino();
+            break;
     }
     game.renderer.clear();
     game.renderer.drawField(game.field);
