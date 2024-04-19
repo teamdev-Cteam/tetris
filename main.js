@@ -18,6 +18,7 @@ class Game {
         this.scoreManager = new ScoreManager();
         this.stopTime = 0;
         this.updateInterval = 870;
+        this.sound = new Sound;
     }
 
     generateNextTetros(){
@@ -80,6 +81,7 @@ class Game {
 
     start(){
         this.isGameOver = false;
+        this.sound.startBGM();
         this.update();
     }
 
@@ -343,11 +345,11 @@ class Field {
                 linesCleared++;
     
                 this.grid.unshift(new Array(this.cols).fill(0));
-    
+                game.sound.clearLines();
                 y++;
             }
         }
-    
+        
         return linesCleared;
     }
 
@@ -593,7 +595,46 @@ class Renderer{
     }
 }
 
+class Sound{
+    
+    constructor(){
+        this.BGMSound = new Audio('sounds/BGM.mp3');
+        this.BGMSound.volume = 0.01;
+        this.BGMSound.loop = true;
+    }
 
+    hardDrop(){
+        let hardDropSound = new Audio('sounds/hardDrop.mp3');
+        hardDropSound.volume = 0.1;
+        hardDropSound.play();
+    }
+
+    rotate(){
+        let rotateSound = new Audio('sounds/123.mp3');
+        rotateSound.volume = 0.1;
+        rotateSound.play();
+    }
+
+    clearLines(){
+        let clearLinesSound = new Audio('sounds/clearLines.mp3');
+        clearLinesSound.volume = 0.1;
+        clearLinesSound.play();
+    }
+
+    fixTetro(){
+        let fixTetroSound = new Audio('sounds/fixTetro.mp3');
+        fixTetroSound.volume = 0.1;
+        fixTetroSound.play();
+    }
+
+    startBGM(){
+        this.BGMSound.play();
+    }
+
+    stopBGM(){
+        this.BGMSound.pause();
+    }
+}
 
 
 function displayNone(ele) {
@@ -670,10 +711,12 @@ document.onkeydown = function(e) {
         case "ArrowUp":
             let newTetro = game.currentTetromino.rotate();
             if (game.canMove(0, 0, newTetro)) game.currentTetromino.shape = newTetro;
+            game.sound.rotate();
             break;
         case " ":
             while (game.canMove(0, 1)) game.currentTetromino.y++;
             game.scoreManager.score++;
+            game.sound.hardDrop();
             break; 
         case "Shift":
             game.changeTetromino();
