@@ -1,8 +1,7 @@
-const config = {
-    loginPage: document.getElementById('loginPage'),
-    initialPage : document.getElementById("initialPage"),
-    mainPage : document.getElementById("mainPage"),
-}
+// const config = {
+//     initialPage : document.getElementById("initialPage"),
+//     mainPage : document.getElementById("mainPage"),
+// }
 
 class Game {
     constructor(){
@@ -81,7 +80,6 @@ class Game {
 
     start(){
         this.isGameOver = false;
-        this.sound.startBGM();
         this.update();
     }
 
@@ -661,28 +659,28 @@ class Sound{
 }
 
 
-function displayNone(ele) {
-    ele.classList.remove("d-block");
-    ele.classList.add("d-none");
-}
+// function displayNone(ele) {
+//     ele.classList.remove("d-block");
+//     ele.classList.add("d-none");
+// }
 
-function displayBlock(ele) {
-    ele.classList.remove("d-none");
-    ele.classList.add("d-block");
-}
+// function displayBlock(ele) {
+//     ele.classList.remove("d-none");
+//     ele.classList.add("d-block");
+// }
 
-function switchPage(page1, page2) {
-    displayNone(page1);
-    displayBlock(page2);
-}
+// function switchPage(page1, page2) {
+//     displayNone(page1);
+//     displayBlock(page2);
+// }
 
-let game;
 
-function gameStart() {
-    switchPage(config.initialPage, config.mainPage);
-    game = new Game();
-    game.start();
-}
+
+// function startGame() {
+//     switchPage(config.initialPage, config.mainPage);
+//     game = new Game();
+//     game.start();
+// }
 
 function startPause() {
     game.startStop();
@@ -690,9 +688,9 @@ function startPause() {
 
 const restartPauseBtn = document.getElementById("restartPauseBtn");
 
-function moveInitialPage() {
-    switchPage(config.mainPage, config.initialPage);
-}
+// function moveInitialPage() {
+//     switchPage(config.mainPage, config.initialPage);
+// }
 
 const resetBtn = document.getElementById("resetBtn");
 function resetAllData() {
@@ -770,12 +768,14 @@ const titleTetro =
 const titleColor = {0:[64, 64, 64], 1:[255,127,127], 2:[255,191,127], 3:[255,255,127], 4:[127,255,127], 5:[127,191,255], 6:[191, 127, 255]};
 const titleBlockSize = 25;
 const titleMiniBlockSize = 10;
-
-const titleCanvas = document.getElementById("title");
-const titleContext = titleCanvas.getContext("2d");
-titleCanvas.width = titleBlockSize * titleTetro[0].length;
-titleCanvas.height = titleBlockSize * titleTetro.length;
-titleCanvas.style.backgroundColor = `rgb(64, 64, 64)`;
+// document.addEventListener("DOMContentLoaded", function() {
+let game = new Game();
+game.start();
+// const titleCanvas = document.getElementById("title");
+// const titleContext = titleCanvas.getContext("2d");
+// titleCanvas.width = titleBlockSize * titleTetro[0].length;
+// titleCanvas.height = titleBlockSize * titleTetro.length;
+// titleCanvas.style.backgroundColor = `rgb(64, 64, 64)`;
 
 const titleMiniCanvas = document.getElementById("mini-title");
 const titleMiniContext = titleMiniCanvas.getContext("2d");
@@ -783,8 +783,9 @@ titleMiniCanvas.width = titleMiniBlockSize * titleTetro[0].length;
 titleMiniCanvas.height = titleMiniBlockSize * titleTetro.length;
 titleMiniCanvas.style.backgroundColor = `rgb(64, 64, 64)`;
 
-drawTitle(titleContext, titleBlockSize);
+// drawTitle(titleContext, titleBlockSize);
 drawTitle(titleMiniContext, titleMiniBlockSize);
+// });
 
 function drawTitle(targetContext ,blockSize) {
     for (let y = 0; y < titleTetro.length; y++) {
