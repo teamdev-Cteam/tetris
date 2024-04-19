@@ -18,6 +18,7 @@ class Game {
         this.scoreManager = new ScoreManager();
         this.stopTime = 0;
         this.updateInterval = 870;
+        this.sound = new Sound;
     }
 
     generateNextTetros(){
@@ -48,7 +49,6 @@ class Game {
     changeTetromino(){
 
         if (!this.doHold) {
-            console.log('既にholdしています');
             return;
         }
         let currentX = this.currentTetromino.x;
@@ -62,11 +62,11 @@ class Game {
             this.currentTetromino.y = currentY;
             this.nextTetros.push(this.generateNewTetromino());
             this.doHold = false;
+            this.sound.changeTetro();
             return;
         }
 
         if (!this.canMove(0, 0, this.holdTetromino.shape)) {
-            console.log('干渉あり');
             return;
         }
         this.currentTetromino.initializeShape(); 
@@ -76,10 +76,12 @@ class Game {
         this.currentTetromino.x = currentX;
         this.currentTetromino.y = currentY;
         this.doHold = false;
+        this.sound.changeTetro();
     }
 
     start(){
         this.isGameOver = false;
+        this.sound.startBGM();
         this.update();
     }
 
@@ -135,6 +137,8 @@ class Game {
                 
                 if (shape[y][x] && this.field.grid[y + this.currentTetromino.y][x + this.currentTetromino.x]) {
                     document.getElementById("modal-btn").dispatchEvent(new Event("click"));
+                    this.sound.stopBGM();
+                    this.sound.gameOver();
                     this.isGameOver = true;
                 }
             }
@@ -163,6 +167,7 @@ class Game {
             restartPauseBtn.innerHTML = `Restart`;
             restartPauseBtn.disabled = true;
             restartPauseBtn.disabled = false;
+            this.sound.startBGM();
             return;
         }
         this.doPause = false;
@@ -171,6 +176,7 @@ class Game {
         restartPauseBtn.disabled = false;
         this.startTime = Date.now();
         this.gameInterval = setInterval(() => this.update(), 500);
+        this.sound.stopBGM();
     }
 
     displayTime() {
@@ -343,11 +349,11 @@ class Field {
                 linesCleared++;
     
                 this.grid.unshift(new Array(this.cols).fill(0));
-    
+                game.sound.clearLines();
                 y++;
             }
         }
-    
+        
         return linesCleared;
     }
 
@@ -383,6 +389,7 @@ class ScoreManager {
     addLevel() {
         if (this.level < 20) game.updateInterval -= 35;
         this.level++;
+        game.sound.levelUp();
     }
 
     updateLevel() {
@@ -399,6 +406,7 @@ class ScoreManager {
             }
         }
         currentLevel.innerHTML = this.level;
+        
     }
 
     incrementLinesCleared(count) {
@@ -593,7 +601,64 @@ class Renderer{
     }
 }
 
+class Sound{
+    
+    constructor(){
+        this.BGMSound = new Audio('sounds/BGM.mp3');
+        this.BGMSound.volume = 0.01;
+        this.BGMSound.loop = true;
+    }
 
+    hardDrop(){
+        let hardDropSound = new Audio('sounds/hardDrop.mp3');
+        hardDropSound.volume = 0.1;
+        hardDropSound.play();
+    }
+
+    rotate(){
+        let rotateSound = new Audio('sounds/rotate.mp3');
+        rotateSound.volume = 0.1;
+        rotateSound.play();
+    }
+
+    clearLines(){
+        let clearLinesSound = new Audio('sounds/clearLines.mp3');
+        clearLinesSound.volume = 0.1;
+        clearLinesSound.play();
+    }
+
+    fixTetro(){
+        let fixTetroSound = new Audio('sounds/fixTetro.mp3');
+        fixTetroSound.volume = 0.1;
+        fixTetroSound.play();
+    }
+
+    changeTetro(){
+        let changeTetroSound = new Audio('sounds/changeTetro.mp3');
+        changeTetroSound.volume = 0.1;
+        changeTetroSound.play();
+    }
+
+    levelUp(){
+        let levelUpSound = new Audio('sounds/levelUp.mp3');
+        levelUpSound.volume = 0.1;
+        levelUpSound.play();
+    }
+
+    gameOver(){
+        let gameOverSound = new Audio('sounds/gameOver.mp3');
+        gameOverSound.volume = 0.05;
+        gameOverSound.play();
+    }
+
+    startBGM(){
+        this.BGMSound.play();
+    }
+
+    stopBGM(){
+        this.BGMSound.pause();
+    }
+}
 
 
 function displayNone(ele) {
@@ -637,6 +702,7 @@ function resetAllData() {
     if (window.confirm("Reset All Data?")) {
         gameStart();
         restartPauseBtn.innerHTML = `Pause`;
+        game.sound.stopBGM();
     }
 }
 
@@ -648,6 +714,7 @@ function backPage() {
     if (window.confirm("Back Page?")) {
         moveInitialPage();
         restartPauseBtn.innerHTML = `Pause`;
+        game.sound.stopBGM();
     }
 }
 
@@ -670,10 +737,12 @@ document.onkeydown = function(e) {
         case "ArrowUp":
             let newTetro = game.currentTetromino.rotate();
             if (game.canMove(0, 0, newTetro)) game.currentTetromino.shape = newTetro;
+            game.sound.rotate();
             break;
         case " ":
             while (game.canMove(0, 1)) game.currentTetromino.y++;
             game.scoreManager.score++;
+            game.sound.hardDrop();
             break; 
         case "Shift":
             game.changeTetromino();
