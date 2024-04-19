@@ -15,7 +15,8 @@
         <div>
             <!-- title -->
             <div class="col-12 d-flex justify-content-center align-items-center">
-                <h1 class="title"><span class="red">T</span><span class="orange">E</span><span class="yellow">T</span><span class="green">R</span><span class="blue">I</span><span class="purple">S</span></h1>
+                <canvas id="title"></canvas>
+                <!-- <h1 class="title"><span class="red">T</span><span class="orange">E</span><span class="yellow">T</span><span class="green">R</span><span class="blue">I</span><span class="purple">S</span></h1> -->
             </div>
             <!-- gameStart button -->
             <div class="col-12 d-flex justify-content-center">
@@ -86,7 +87,8 @@
     <div class="vh-100 pt-5">
         <div class="d-flex"> 
             <div class="col-3">
-                <h1 class="title"><span class="red">T</span><span class="orange">E</span><span class="yellow">T</span><span class="green">R</span><span class="blue">I</span><span class="purple">S</span></h1>
+                <canvas id="mini-title"></canvas>
+                <!-- <h1 class="title"><span class="red">T</span><span class="orange">E</span><span class="yellow">T</span><span class="green">R</span><span class="blue">I</span><span class="purple">S</span></h1> -->
                 <!-- Restart/Pause -->
                 <div class="btn-group">
                     <button id="restartPauseBtn" class="btn btn-warning" onclick="startPause();">Pause</button>
@@ -126,6 +128,11 @@
                 <div>
                     <h4 class="info">TIME</h4>
                     <h4 id="time" class="info-main">00:00:00</h4>
+                </div>
+                <!-- Level -->
+                <div>
+                    <h4 class="info">LEVEL</h4>
+                    <h4 id="level" class="info-main">1</h4>
                 </div>
                 <!-- Score -->
                 <div>
