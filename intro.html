@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/intro.css">
+    <title>Tetris</title>
+</head>
+<body>
+
+<!-- 最初のページ -->
+<div id="initialPage">
+    <div class="vh-100 d-flex flex-column justify-content-center align-items-center">
+        <div>
+            <!-- title -->
+            <div class="col-12 d-flex justify-content-center align-items-center">
+                <canvas id="title"></canvas>
+                <!-- <h1 class="title"><span class="red">T</span><span class="orange">E</span><span class="yellow">T</span><span class="green">R</span><span class="blue">I</span><span class="purple">S</span></h1> -->
+            </div>
+            <!-- gameStart button -->
+            <div class="col-12 d-flex justify-content-center">
+                <button id="startBtn" class="btn btn-primary btn-lg" onclick="window.location.href='game.html'">START</button>
+            </div>
+            <div class="col-4 offset-4 pt-3">
+                <!-- 操作方法 -->
+                <label class="d-flex open justify-content-center btn-primary" for="pop-up1">操作方法</label>
+                <input type="checkbox" id="pop-up1">
+                <div class="overlay">
+                    <div class="window">
+                        <label class="close" for="pop-up1">×</label>
+                        <h3 class="pb-3"><strong>操作方法</strong></h3>
+                        <table class="table">
+                            <thead>
+                                <tr class="table-warning">
+                                    <th scope="col">キー</th>
+                                    <th scope="col">動作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">←</th>
+                                    <td>左に動く</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">→</th>
+                                    <td>右に動く</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">↑</th>
+                                    <td colspan="2">回転</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">↓</th>
+                                    <td colspan="2">ソフトドロップ</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">SPACE</th>
+                                    <td colspan="2">ハードドロップ</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">SHIFT</th>
+                                    <td colspan="2">ホールド</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- ルール -->
+                <label class="d-flex open justify-content-center btn-primary" for="pop-up2">ルール</label>
+                <input type="checkbox" id="pop-up2">
+                <div class="overlay">
+                    <div class="window d-flex">
+                        <label class="close" for="pop-up2">×</label>
+                        <div>
+                            <h2>ルール</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+#initialPage {
+    background-image: url(../images/background.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-position: center top;
+    /* コンテンツの高さが画像の高さより大きい時、動かないように固定 */
+    background-attachment: fixed;
+}
+
+.open {
+    cursor: pointer;
+}
+
+#pop-up1, #pop-up2{
+    display: none;
+}
+
+.overlay {
+    display: none;
+}
+
+#pop-up1:checked + .overlay, #pop-up2:checked + .overlay {
+    display: block;
+    z-index: 9999;
+    position: fixed;
+}
+
+.window {
+    width: 90vw;
+    max-width: 500px;
+    height: 500px;
+    background-color: #ffffff;
+    border: 5px solid gray;
+    border-radius: 15px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 5rem;
+}
+
+.close {
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 35px;
+}
