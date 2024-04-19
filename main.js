@@ -12,12 +12,12 @@ class Game {
         this.holdTetromino = null;
         this.doHold = true;
         this.isGameOver = false;
-        this.gameInterval = null;
         this.renderer = this.initRenderer();
         this.doPause = false;
         this.startTime = Date.now();
         this.scoreManager = new ScoreManager();
         this.stopTime = 0;
+        this.updateInterval = 870;
     }
 
     generateNextTetros(){
@@ -81,7 +81,6 @@ class Game {
     start(){
         this.isGameOver = false;
         this.update();
-        this.gameInterval = setInterval(() => this.update(), 500);
     }
 
     update(){
@@ -89,8 +88,6 @@ class Game {
 
         this.checkGameOver();
         if (this.isGameOver){
-            clearInterval(this.gameInterval);
-            console.log("Game Over");
             return;
         }
 
@@ -102,19 +99,27 @@ class Game {
         this.renderer.drawHoldTetro(this.holdTetromino);
         this.renderer.drawTetromino(this.currentTetromino);
         this.moveTetro();
+        currentScore.innerHTML = this.scoreManager.score;
         let linesCleared = this.field.clearLines();
         if (linesCleared > 0) {
             this.scoreManager.incrementLinesCleared(linesCleared);
+            this.scoreManager.updateLevel();
             this.scoreManager.incrementCombo();
-            currentScore.innerHTML = this.scoreManager.score;
+            if (this.field.isClear()){
+                this.scoreManager.perfectClear(linesCleared);
+            }
         } else {
             this.scoreManager.initCombo();
         }
+
+        setTimeout(() => this.update(), this.updateInterval);
         
     }
 
     moveTetro() {
         if (!this.canMove(0, 1)) {
+            this.scoreManager.score++;
+            console.log(this.scoreManager.score);
             this.field.addTetromino(this.currentTetromino);
             this.currentTetromino = this.nextTetros.shift(0);
             this.nextTetros.push(this.generateNewTetromino());
@@ -258,18 +263,13 @@ class Tetromino {
     getRandomTetrominoShape() {
         const shapes = Object.keys(this.tetrominoShapes);
         const randomShape = shapes[Math.floor(Math.random() * shapes.length)];
-        return this.tetrominoShapes[randomShape];
+        // return this.tetrominoShapes[randomShape];
         // テスト用
-        // return this.tetrominoShapes["I"];
+        return this.tetrominoShapes["I"];
     }
     
     initializeShape() {
         this.shape = this.originalShape;
-    }
-
-    move(dx, dy){
-        this.x += dx;
-        this.y += dy;
     }
 
     rotate() {
@@ -315,6 +315,16 @@ class Field {
         game.doHold = true;
     }
 
+    isClear() {
+        for (let y = 0; y < this.rows; y++) {
+            for (let x = 0; x < this.cols; x++) {
+                if (this.grid[y][x] != 0) return false;
+            }
+        }
+
+        return true;
+    }
+
     clearLines() {
         let linesCleared = 0;
     
@@ -352,30 +362,40 @@ class ScoreManager {
         this.combo = 0;
     }
 
-    // perfect Clear, Combo, Line, HardSoftDrop, Gravity, level;
+    // perfect Clear;
+    perfectClear(linesCleared) {
+        if (linesCleared == 1) this.score += 900;
+        if (linesCleared == 2) this.score += 1500;
+        if (linesCleared == 3) this.score += 2300;
+        if (linesCleared == 4) {
+            this.score += 2800;
+            console.log("call 2800");
+        }
+        
+    }
 
     addScore(linesCleared) {
         const scores = {1: 100, 2: 300, 3: 500, 4 : 800};
         this.score += scores[linesCleared];
-        console.log("SCORE");
-        console.log(this.score);
+
+    }
+
+    addLevel() {
+        if (this.level < 20) game.updateInterval -= 35;
+        this.level++;
     }
 
     updateLevel() {
         const linesPerLevel = 10;
         if (this.level <= 10) {
             if (this.linesCleared >= linesPerLevel * this.level) {
-                this.level++;
+                this.addLevel();
                 this.linesCleared = 0;
-                console.log("LEVEL");
-                console.log(this.level);
             }
         } else {
             if  (this.linesCleared >= 100) {
-                this.level++;
+                this.addLevel();
                 this.linesCleared = 0;
-                console.log("LEVEL");
-                console.log(this.level);
             }
         }
         currentLevel.innerHTML = this.level;
@@ -384,7 +404,6 @@ class ScoreManager {
     incrementLinesCleared(count) {
         this.linesCleared += count;
         this.addScore(count);
-        this.updateLevel();
     }
 
     getScore() {
@@ -401,11 +420,7 @@ class ScoreManager {
 
     incrementCombo() {
         this.combo += 1;
-        console.log("COMBO前");
-        console.log(this.score);
         this.score += this.combo * 50;
-        console.log("COMBO後");
-        console.log(this.score);
     }
 }
 
@@ -601,7 +616,6 @@ let game;
 function gameStart() {
     switchPage(config.initialPage, config.mainPage);
     game = new Game();
-    console.log("gameStart");
     game.start();
 }
 
@@ -659,6 +673,7 @@ document.onkeydown = function(e) {
             break;
         case " ":
             while (game.canMove(0, 1)) game.currentTetromino.y++;
+            game.scoreManager.score++;
             break; 
         case "Shift":
             game.changeTetromino();
