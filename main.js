@@ -49,7 +49,6 @@ class Game {
     changeTetromino(){
 
         if (!this.doHold) {
-            console.log('既にholdしています');
             return;
         }
         let currentX = this.currentTetromino.x;
@@ -63,11 +62,11 @@ class Game {
             this.currentTetromino.y = currentY;
             this.nextTetros.push(this.generateNewTetromino());
             this.doHold = false;
+            this.sound.changeTetro();
             return;
         }
 
         if (!this.canMove(0, 0, this.holdTetromino.shape)) {
-            console.log('干渉あり');
             return;
         }
         this.currentTetromino.initializeShape(); 
@@ -77,6 +76,7 @@ class Game {
         this.currentTetromino.x = currentX;
         this.currentTetromino.y = currentY;
         this.doHold = false;
+        this.sound.changeTetro();
     }
 
     start(){
@@ -137,6 +137,8 @@ class Game {
                 
                 if (shape[y][x] && this.field.grid[y + this.currentTetromino.y][x + this.currentTetromino.x]) {
                     document.getElementById("modal-btn").dispatchEvent(new Event("click"));
+                    this.sound.stopBGM();
+                    this.sound.gameOver();
                     this.isGameOver = true;
                 }
             }
@@ -165,6 +167,7 @@ class Game {
             restartPauseBtn.innerHTML = `Restart`;
             restartPauseBtn.disabled = true;
             restartPauseBtn.disabled = false;
+            this.sound.startBGM();
             return;
         }
         this.doPause = false;
@@ -173,6 +176,7 @@ class Game {
         restartPauseBtn.disabled = false;
         this.startTime = Date.now();
         this.gameInterval = setInterval(() => this.update(), 500);
+        this.sound.stopBGM();
     }
 
     displayTime() {
@@ -401,6 +405,7 @@ class ScoreManager {
             }
         }
         currentLevel.innerHTML = this.level;
+        game.sound.levelUp();
     }
 
     incrementLinesCleared(count) {
@@ -610,7 +615,7 @@ class Sound{
     }
 
     rotate(){
-        let rotateSound = new Audio('sounds/123.mp3');
+        let rotateSound = new Audio('sounds/rotate.mp3');
         rotateSound.volume = 0.1;
         rotateSound.play();
     }
@@ -625,6 +630,24 @@ class Sound{
         let fixTetroSound = new Audio('sounds/fixTetro.mp3');
         fixTetroSound.volume = 0.1;
         fixTetroSound.play();
+    }
+
+    changeTetro(){
+        let changeTetroSound = new Audio('sounds/changeTetro.mp3');
+        changeTetroSound.volume = 0.1;
+        changeTetroSound.play();
+    }
+
+    levelUp(){
+        let levelUpSound = new Audio('sounds/levelUp.mp3');
+        levelUpSound.volume = 0.1;
+        levelUpSound.play();
+    }
+
+    gameOver(){
+        let gameOverSound = new Audio('sounds/gameOver.mp3');
+        gameOverSound.volume = 0.1;
+        gameOverSound.play();
     }
 
     startBGM(){
