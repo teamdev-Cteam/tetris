@@ -83,6 +83,14 @@
 
 <!-- メインページ -->
 <div id="mainPage" class="d-none">
+    <div id="gameOver" class="d-none">
+        <div class="vh-100 vw-100 d-flex justify-content-center align-items-center">
+            <h1>GAME OVER</h1>
+            <button type="button" class="btn btn-secondary" onclick="moveInitialPage(); displayNoneGameOverPage();">CLOSE</button>
+            <button type="button" class="btn btn-primary" onclick="gameStart(); displayNoneGameOverPage();">PLAY AGAIN</button>
+            
+        </div>
+    </div>
     <div class="vh-100 pt-5">
         <div class="d-flex"> 
             <div class="col-3">
@@ -132,22 +140,6 @@
                     <h4 class="info">SCORE</h4>
                     <h4 id="score" class="info-main">0</h4>
                 </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- gameOver後 -->
-    <button id="modal-btn" type="button" class="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal"></button>
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel"></h5>
-            </div>
-            <div class="modal-body"></div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="moveInitialPage();">CLOSE</button>
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="gameStart();">PLAY AGAIN</button>
             </div>
         </div>
     </div>
