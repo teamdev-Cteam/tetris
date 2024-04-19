@@ -1,7 +1,7 @@
 const config = {
-    loginPage: document.getElementById('loginPage'),
     initialPage : document.getElementById("initialPage"),
     mainPage : document.getElementById("mainPage"),
+    gameOverPage: document.getElementById("gameOver"),
 }
 
 class Game {
@@ -136,7 +136,7 @@ class Game {
             for (let y = 0; y < shape.length; y++) {
                 
                 if (shape[y][x] && this.field.grid[y + this.currentTetromino.y][x + this.currentTetromino.x]) {
-                    document.getElementById("modal-btn").dispatchEvent(new Event("click"));
+                    displayGameOverPage();
                     this.sound.stopBGM();
                     this.sound.gameOver();
                     this.isGameOver = true;
@@ -720,6 +720,16 @@ function backPage() {
 
 const currentLevel = document.getElementById("level");
 const currentScore = document.getElementById("score");
+
+function displayGameOverPage() {
+    displayBlock(config.gameOverPage);
+    config.gameOverPage.style.opacity = 1;
+}
+
+function displayNoneGameOverPage() {
+    displayNone(config.gameOverPage);
+    config.gameOverPage.style.opacity = 0;
+}
 
 document.onkeydown = function(e) {
     if (game.isGameOver) return;
