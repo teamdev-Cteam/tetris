@@ -602,8 +602,8 @@ class Renderer{
 }
 
 class Sound{
-    
     constructor(){
+        this.soundLevel = 0.1
         this.BGMSound = new Audio('sounds/BGM.mp3');
         this.BGMSound.volume = 0.01;
         this.BGMSound.loop = true;
@@ -611,43 +611,43 @@ class Sound{
 
     hardDrop(){
         let hardDropSound = new Audio('sounds/hardDrop.mp3');
-        hardDropSound.volume = 0.1;
+        hardDropSound.volume = this.soundLevel;
         hardDropSound.play();
     }
 
     rotate(){
         let rotateSound = new Audio('sounds/rotate.mp3');
-        rotateSound.volume = 0.1;
+        rotateSound.volume = this.soundLevel;
         rotateSound.play();
     }
 
     clearLines(){
         let clearLinesSound = new Audio('sounds/clearLines.mp3');
-        clearLinesSound.volume = 0.1;
+        clearLinesSound.volume = this.soundLevel;
         clearLinesSound.play();
     }
 
     fixTetro(){
         let fixTetroSound = new Audio('sounds/fixTetro.mp3');
-        fixTetroSound.volume = 0.1;
+        fixTetroSound.volume = this.soundLevel;
         fixTetroSound.play();
     }
 
     changeTetro(){
         let changeTetroSound = new Audio('sounds/changeTetro.mp3');
-        changeTetroSound.volume = 0.1;
+        changeTetroSound.volume = this.soundLevel;
         changeTetroSound.play();
     }
 
     levelUp(){
         let levelUpSound = new Audio('sounds/levelUp.mp3');
-        levelUpSound.volume = 0.1;
+        levelUpSound.volume = this.soundLevel;
         levelUpSound.play();
     }
 
     gameOver(){
         let gameOverSound = new Audio('sounds/gameOver.mp3');
-        gameOverSound.volume = 0.05;
+        gameOverSound.volume = this.soundLevel * 0.5;
         gameOverSound.play();
     }
 
@@ -708,8 +708,8 @@ function resetAllData() {
 const backBtn = document.getElementById("backBtn");
 function backPage() {
     if (!game.doPause) startPause();
-    backBtn.disabled = true;
-    backBtn.disabled = false;
+        backBtn.disabled = true;
+        backBtn.disabled = false;
     if (window.confirm("Back Page?")) {
         moveInitialPage();
         restartPauseBtn.innerHTML = `Pause`;
@@ -719,6 +719,14 @@ function backPage() {
 
 const currentLevel = document.getElementById("level");
 const currentScore = document.getElementById("score");
+
+const volumeSlider = document.getElementById('volumeSlider');
+volumeSlider.addEventListener('input', function() {
+    volumeSlider.disabled = true;
+    volumeSlider.disabled = false;
+    game.sound.soundLevel = this.value;
+    game.sound.BGMSound.volume = this.value * 0.1;
+}, false);
 
 function displayGameOverPage() {
     displayBlock(config.gameOverPage);
