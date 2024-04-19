@@ -646,7 +646,7 @@ class Sound{
 
     gameOver(){
         let gameOverSound = new Audio('sounds/gameOver.mp3');
-        gameOverSound.volume = 0.1;
+        gameOverSound.volume = 0.05;
         gameOverSound.play();
     }
 
@@ -701,6 +701,7 @@ function resetAllData() {
     if (window.confirm("Reset All Data?")) {
         gameStart();
         restartPauseBtn.innerHTML = `Pause`;
+        game.sound.stopBGM();
     }
 }
 
@@ -712,6 +713,7 @@ function backPage() {
     if (window.confirm("Back Page?")) {
         moveInitialPage();
         restartPauseBtn.innerHTML = `Pause`;
+        game.sound.stopBGM();
     }
 }
 
