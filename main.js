@@ -264,6 +264,7 @@ class Tetromino {
         this.color = tetroInfo.color;
         this.x = tetroInfo.startX;
         this.y = 0;
+        this.doHardDrop = true;
     }
 
     getRandomTetrominoShape() {
@@ -748,7 +749,10 @@ document.onkeydown = function(e) {
             game.sound.rotate();
             break;
         case " ":
+            if (!game.currentTetromino.doHardDrop) return;
+            game.currentTetromino.doHardDrop = false;
             while (game.canMove(0, 1)) game.currentTetromino.y++;
+            // 1テトロに一回だけ足す
             game.scoreManager.score++;
             game.sound.hardDrop();
             break; 
