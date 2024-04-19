@@ -1,5 +1,5 @@
 #initialPage {
-    background-image: url(https://cdn.discordapp.com/attachments/1225406402521202699/1229055878523654214/OIG3_1.jpg?ex=662e4a7c&is=661bd57c&hm=60fdec8b18d39cc90df86ac86ade279314c64bbddf7a899b0810a0feba25c1d9&);
+    background-image: url(images/background.jpg);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -9,14 +9,14 @@
 }
 
 #mainPage {
-    background-image: url(https://cdn.discordapp.com/attachments/1225406402521202699/1229055878523654214/OIG3_1.jpg?ex=662e4a7c&is=661bd57c&hm=60fdec8b18d39cc90df86ac86ade279314c64bbddf7a899b0810a0feba25c1d9&);
+    background-image: url(images/background.jpg);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
     background-position: center bottom;
-    /* コンテンツの高さが画像の高さより大きい時、動かないように固定 */
     background-attachment: fixed;
 }
+
 /*
 body {
     background-image: linear-gradient(45deg, #716eff,#5a4dc6 , #b5e9e2 , #3c4dd5);
@@ -25,11 +25,14 @@ body {
 }
 */
 
+/*
 #initialPage .title {
     font-size: 8rem;
     background-color: rgba(67, 65, 65);
     text-align: center;
     padding: 0.1em;
+    font-weight: bold;
+    text-shadow: 1px 1px 0 #666, 2px 2px 0 #666, 3px 3px 0 #666, 4px 4px 0 #666, 5px 5px 0 #666; 
 }
 
 .red {
@@ -46,11 +49,32 @@ body {
 }
 .blue {
     color: rgb(127,191,255);
-    /* color: rgb(127,255,255); */
 }
 .purple {
     color: rgb(191, 127, 255);
 }
+*/
+
+/*
+#initialPage .red {
+    text-shadow: 1px 1px 0 rgb(200, 100, 100), 2px 2px 0 rgb(200, 100, 100),3px 3px 0 rgb(200, 100, 100), 4px 4px 0 rgb(200, 100, 100), 5px 5px 0 rgb(200, 100, 100);
+}
+#initialPage .orange {
+    text-shadow: 1px 1px 0 rgb(206, 154, 102), 2px 2px 0 rgb(206, 154, 102),3px 3px 0 rgb(206, 154, 102), 4px 4px 0 rgb(206, 154, 102), 5px 5px 0 rgb(206, 154, 102);
+}
+#initialPage .yellow {
+    text-shadow: 1px 1px 0 rgb(132, 132, 54), 2px 2px 0 rgb(132, 132, 54),3px 3px 0 rgb(132, 132, 54), 4px 4px 0 rgb(132, 132, 54), 5px 5px 0 rgb(132, 132, 54);
+}
+#initialPage .green {
+    text-shadow: 1px 1px 0 rgb(89, 174, 89), 2px 2px 0 rgb(89, 174, 89),3px 3px 0 rgb(89, 174, 89), 4px 4px 0 rgb(89, 174, 89), 5px 5px 0 rgb(89, 174, 89);
+}
+#initialPage .blue {
+    text-shadow: 1px 1px 0 rgb(75, 112, 150), 2px 2px 0 rgb(75, 112, 150),3px 3px 0 rgb(75, 112, 150), 4px 4px 0 rgb(75, 112, 150), 5px 5px 0 rgb(75, 112, 150);
+}
+#initialPage .purple {
+    text-shadow: 1px 1px 0 rgb(129, 86, 173), 2px 2px 0 rgb(129, 86, 173),3px 3px 0 rgb(129, 86, 173), 4px 4px 0 rgb(129, 86, 173), 5px 5px 0 rgb(129, 86, 173);
+}
+*/
 
 .open {
     cursor: pointer;
