@@ -19,6 +19,7 @@ class Game {
         this.stopTime = 0;
         this.updateInterval = 870;
         this.sound = new Sound;
+        this.gameInterval = null;
     }
 
     generateNextTetros(){
@@ -80,9 +81,10 @@ class Game {
     }
 
     start(){
+        this.update();
         this.isGameOver = false;
         this.sound.startBGM();
-        this.update();
+        this.gameInterval = setInterval(() => this.update(), this.updateInterval);
     }
 
     update(){
@@ -113,9 +115,6 @@ class Game {
         } else {
             this.scoreManager.initCombo();
         }
-
-        setTimeout(() => this.update(), this.updateInterval);
-        
     }
 
     moveTetro() {
@@ -167,16 +166,16 @@ class Game {
             restartPauseBtn.innerHTML = `Restart`;
             restartPauseBtn.disabled = true;
             restartPauseBtn.disabled = false;
+            this.sound.stopBGM();
+        } else {
+            this.doPause = false;
+            restartPauseBtn.innerHTML = `Pause`;
+            restartPauseBtn.disabled = true;
+            restartPauseBtn.disabled = false;
+            this.startTime = Date.now();
+            this.gameInterval = setInterval(() => this.update(), this.updateInterval);
             this.sound.startBGM();
-            return;
         }
-        this.doPause = false;
-        restartPauseBtn.innerHTML = `Pause`;
-        restartPauseBtn.disabled = true;
-        restartPauseBtn.disabled = false;
-        this.startTime = Date.now();
-        this.gameInterval = setInterval(() => this.update(), 500);
-        this.sound.stopBGM();
     }
 
     displayTime() {
@@ -388,6 +387,8 @@ class ScoreManager {
         if (this.level < 20) game.updateInterval -= 35;
         this.level++;
         game.sound.levelUp();
+        clearInterval(game.gameInterval);
+        game.gameInterval = setInterval(() => game.update(), game.updateInterval);
     }
 
     updateLevel() {
@@ -700,7 +701,6 @@ function resetAllData() {
     if (window.confirm("Reset All Data?")) {
         gameStart();
         restartPauseBtn.innerHTML = `Pause`;
-        game.sound.stopBGM();
     }
 }
 
