@@ -269,9 +269,7 @@ class Tetromino {
     getRandomTetrominoShape() {
         const shapes = Object.keys(this.tetrominoShapes);
         const randomShape = shapes[Math.floor(Math.random() * shapes.length)];
-        // return this.tetrominoShapes[randomShape];
-        // テスト用
-        return this.tetrominoShapes["I"];
+        return this.tetrominoShapes[randomShape];
     }
     
     initializeShape() {
