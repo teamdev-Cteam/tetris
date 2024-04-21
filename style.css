@@ -4,7 +4,6 @@
     background-size: cover;
     background-position: center;
     background-position: center top;
-    /* コンテンツの高さが画像の高さより大きい時、動かないように固定 */
     background-attachment: fixed;
 }
 
@@ -17,67 +16,9 @@
     background-attachment: fixed;
 }
 
-/*
-body {
-    background-image: linear-gradient(45deg, #716eff,#5a4dc6 , #b5e9e2 , #3c4dd5);
-    background-size: 100%;
-    background-position: 0px 0px,13px 13px;
-}
-*/
-
-/*
-#initialPage .title {
-    font-size: 8rem;
-    background-color: rgba(67, 65, 65);
-    text-align: center;
-    padding: 0.1em;
-    font-weight: bold;
-    text-shadow: 1px 1px 0 #666, 2px 2px 0 #666, 3px 3px 0 #666, 4px 4px 0 #666, 5px 5px 0 #666; 
-}
-
-.red {
-    color: rgb(255,127,127);
-}
-.orange {
-    color: rgb(255,191,127);
-}
-.yellow {
-    color: rgb(255,255,127);
-}
-.green {
-    color: rgb(127,255,127);
-}
-.blue {
-    color: rgb(127,191,255);
-}
-.purple {
-    color: rgb(191, 127, 255);
-}
-*/
-
-/*
-#initialPage .red {
-    text-shadow: 1px 1px 0 rgb(200, 100, 100), 2px 2px 0 rgb(200, 100, 100),3px 3px 0 rgb(200, 100, 100), 4px 4px 0 rgb(200, 100, 100), 5px 5px 0 rgb(200, 100, 100);
-}
-#initialPage .orange {
-    text-shadow: 1px 1px 0 rgb(206, 154, 102), 2px 2px 0 rgb(206, 154, 102),3px 3px 0 rgb(206, 154, 102), 4px 4px 0 rgb(206, 154, 102), 5px 5px 0 rgb(206, 154, 102);
-}
-#initialPage .yellow {
-    text-shadow: 1px 1px 0 rgb(132, 132, 54), 2px 2px 0 rgb(132, 132, 54),3px 3px 0 rgb(132, 132, 54), 4px 4px 0 rgb(132, 132, 54), 5px 5px 0 rgb(132, 132, 54);
-}
-#initialPage .green {
-    text-shadow: 1px 1px 0 rgb(89, 174, 89), 2px 2px 0 rgb(89, 174, 89),3px 3px 0 rgb(89, 174, 89), 4px 4px 0 rgb(89, 174, 89), 5px 5px 0 rgb(89, 174, 89);
-}
-#initialPage .blue {
-    text-shadow: 1px 1px 0 rgb(75, 112, 150), 2px 2px 0 rgb(75, 112, 150),3px 3px 0 rgb(75, 112, 150), 4px 4px 0 rgb(75, 112, 150), 5px 5px 0 rgb(75, 112, 150);
-}
-#initialPage .purple {
-    text-shadow: 1px 1px 0 rgb(129, 86, 173), 2px 2px 0 rgb(129, 86, 173),3px 3px 0 rgb(129, 86, 173), 4px 4px 0 rgb(129, 86, 173), 5px 5px 0 rgb(129, 86, 173);
-}
-*/
-
 .open {
     cursor: pointer;
+    border-radius: 3px;
 }
 
 #pop-up1, #pop-up2{
@@ -97,6 +38,25 @@ body {
 .window {
     width: 90vw;
     max-width: 500px;
+    height: 500px;
+    background-color: #ffffff;
+    border: 5px solid gray;
+    border-radius: 15px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 5rem;
+}
+
+.window2 {
+    width: 90vw;
+    max-width: 900px;
     height: 500px;
     background-color: #ffffff;
     border: 5px solid gray;
@@ -155,7 +115,10 @@ canvas {
     background: rgba(0, 0, 0, 0.8);
     justify-content: center;
     align-items: center;
+    flex-direction: column;
     z-index: 9999;
-    opacity: 0;
-    transition: opacity 0.5s;
+}
+
+.color {
+    color: rgb(81, 128, 53);
 }

@@ -16,10 +16,9 @@
             <!-- title -->
             <div class="col-12 d-flex justify-content-center align-items-center">
                 <canvas id="title"></canvas>
-                <!-- <h1 class="title"><span class="red">T</span><span class="orange">E</span><span class="yellow">T</span><span class="green">R</span><span class="blue">I</span><span class="purple">S</span></h1> -->
             </div>
             <!-- gameStart button -->
-            <div class="col-12 d-flex justify-content-center">
+            <div class="col-12 d-flex justify-content-center mt-3">
                 <button id="startBtn" class="btn btn-primary btn-lg" onclick="gameStart();">START</button>
             </div>
             <div class="col-4 offset-4 pt-3">
@@ -70,10 +69,72 @@
                 <label class="d-flex open justify-content-center btn-primary" for="pop-up2">ルール</label>
                 <input type="checkbox" id="pop-up2">
                 <div class="overlay">
-                    <div class="window d-flex">
+                    <div class="window2 d-flex">
                         <label class="close" for="pop-up2">×</label>
-                        <div>
-                            <h2>ルール</h2>
+                        <h3>ルール</h3>
+                        <div class="d-flex w-100">
+                            <table class="table col-6 mr-2">
+                                <thead>
+                                    <tr class="table-warning">
+                                        <th space="col">動作</th>
+                                        <th space="col">点数</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">ソフトドロップ</th>
+                                        <th colspan="1">1</th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">ハードドロップ</th>
+                                        <th colspan="1">2</th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">１ライン消去</th>
+                                        <th colspan="1">100</th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">２ライン消去</th>
+                                        <th colspan="1">300</th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">３ライン消去</th>
+                                        <th colspan="1">500</th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">４ライン消去</th>
+                                        <th colspan="1">800</th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="table col-6">
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">1ライン消去+全消し</th>
+                                        <th colspan="1">900</th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">2ライン消去 + 全消し</th>
+                                        <th colspan="1">1500</th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">3ライン消去 + 全消し</th>
+                                        <th colspan="1">2300</th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">4ライン消去 + 全消し</th>
+                                        <th colspan="1">2800</th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">コンボ数</th>
+                                        <th colspan="1">コンボ数 x 50</th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"> </th>
+                                        <th colspan="1"> </th>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -86,17 +147,21 @@
 <div id="mainPage" class="d-none">
     <div id="gameOver" class="d-none">
         <div class="vh-100 vw-100 d-flex justify-content-center align-items-center">
-            <h1>GAME OVER</h1>
-            <button type="button" class="btn btn-secondary" onclick="moveInitialPage(); displayNoneGameOverPage();">CLOSE</button>
-            <button type="button" class="btn btn-primary" onclick="gameStart(); displayNoneGameOverPage();">PLAY AGAIN</button>
-            
+            <div>
+                <div>
+                    <h1>GAME OVER</h1>
+                </div>
+                <div class="col-12">
+                    <button type="button" class="btn btn-secondary" onclick="gameOverToInitial();">CLOSE</button>
+                    <button type="button" class="btn btn-primary" onclick="playAgain();">PLAY AGAIN</button>
+                </div>
+            </div>
         </div>
     </div>
     <div class="vh-100 pt-5">
         <div class="d-flex"> 
             <div class="col-3">
                 <canvas id="mini-title"></canvas>
-                <!-- <h1 class="title"><span class="red">T</span><span class="orange">E</span><span class="yellow">T</span><span class="green">R</span><span class="blue">I</span><span class="purple">S</span></h1> -->
                 <!-- Restart/Pause -->
                 <div class="btn-group">
                     <button id="restartPauseBtn" class="btn btn-warning" onclick="startPause();">Pause</button>
