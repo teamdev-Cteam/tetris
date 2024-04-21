@@ -9,9 +9,6 @@ recursionのチーム開発で、三名で作成したタイムアタックテ�
 - [使用技術](#使用技術)
 
 ## demo
-<img width="749" alt="image" src="https://user-images.githubusercontent.com/109569162/215386051-e430e70b-4875-4e10-803c-af6fd6012ca3.png">
-<img width="749" alt="スクリーンショット_20230130_131653" src="https://user-images.githubusercontent.com/109569162/215654790-145e0644-d5c5-4aac-9536-11268d4c1b29.png">
-# demo
 <img width="749" alt="image" src="https://github.com/teamdev-Cteam/tetris/assets/166124956/6b8d3c8b-1bdc-48fb-b9a8-f0bcb222f2a1">
 <img width="749" alt="スクリーンショット_20230130_131653" src="https://github.com/teamdev-Cteam/tetris/assets/166124956/fcd74ced-7ab5-4238-966d-6330975e9dab">
 <img width="749" alt="スクリーンショット_20230130_131653" src="https://github.com/teamdev-Cteam/tetris/assets/166124956/d083d197-c4e4-4abd-8039-1efff58b79b7">
