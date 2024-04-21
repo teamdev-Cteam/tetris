@@ -9,12 +9,10 @@ recursionのチーム開発で、三名で作成したタイムアタックテ�
 - [使用技術](#使用技術)
 
 ## demo
+<img width="749" alt="スクリーンショット_20230130_131653" src="https://github.com/teamdev-Cteam/tetris/assets/166124956/31ef78a5-1ffd-48f6-90aa-eb03db2edc85">
+<img width="749" alt="スクリーンショット_20230130_131653" src="https://github.com/teamdev-Cteam/tetris/assets/166124956/f2518c63-41cb-4240-ad2a-560e0e1af0ff">
+<img width="749" alt="スクリーンショット_20230130_131653" src="https://github.com/teamdev-Cteam/tetris/assets/166124956/c1fed7e8-c809-4740-bd5e-6558accc9754">
 <img width="749" alt="image" src="https://github.com/teamdev-Cteam/tetris/assets/166124956/6b8d3c8b-1bdc-48fb-b9a8-f0bcb222f2a1">
-<img width="749" alt="スクリーンショット_20230130_131653" src="https://github.com/teamdev-Cteam/tetris/assets/166124956/fcd74ced-7ab5-4238-966d-6330975e9dab">
-<img width="749" alt="スクリーンショット_20230130_131653" src="https://github.com/teamdev-Cteam/tetris/assets/166124956/d083d197-c4e4-4abd-8039-1efff58b79b7">
-
-
-![スクリーンショット (31)](https://github.com/teamdev-Cteam/tetris/assets/166124956/31ef78a5-1ffd-48f6-90aa-eb03db2edc85)
 
 
 ## 概要
