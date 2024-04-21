@@ -92,6 +92,7 @@ class Game {
 
         this.checkGameOver();
         if (this.isGameOver){
+            clearInterval(this.gameInterval);
             return;
         }
 
@@ -292,7 +293,7 @@ class Field {
     constructor(rows, cols) {
         this.rows = rows;
         this.cols = cols;
-        this.colorType = {0: [64, 64, 64], 1: [191, 127, 255], 2: [255,191,127], 3: [127,255,255], 4: [255,255,127], 5: [127,255,127], 6: [127,191,255], 7:[255,127,127]};
+        this.colorType = {0: [64, 64, 64], 1: [191, 127, 255], 2: [255,191,127], 3: [127,255,255], 4: [255,255,127], 5: [127,255,127], 6: [127,191,255], 7:[255,127,127], 8:[255, 255, 255]};
         this.grid = this.initializeGrid(rows, cols);
     }
 
@@ -331,7 +332,7 @@ class Field {
 
     clearLines() {
         let linesCleared = 0;
-    
+        let arrY = [];
         for (let y = this.rows - 1; y >= 0; y--) {
             let isFull = true;
     
@@ -343,14 +344,31 @@ class Field {
             }
     
             if (isFull) {
-                this.grid.splice(y, 1);
-                linesCleared++;
-    
-                this.grid.unshift(new Array(this.cols).fill(0));
-                game.sound.clearLines();
-                y++;
+                arrY.push(y);
             }
         }
+
+        
+        if (arrY.length) {
+            for (let i = 0; i < arrY.length; i++) {
+                let y = arrY[i];
+                for (let x = 0; x < this.cols; x++) {
+                    this.grid[y][x] = 8;
+                }
+            }
+            game.renderer.drawField(game.field);
+            
+            let increment = 0;
+            for (let i = 0; i < arrY.length; i++) {
+                let y = arrY[i] + increment;
+                this.grid.splice(y, 1);
+                this.grid.unshift(new Array(this.cols).fill(0));
+                game.sound.clearLines();
+                increment++;
+                linesCleared++;
+            }
+        }
+        
         
         return linesCleared;
     }
@@ -729,13 +747,18 @@ volumeSlider.addEventListener('input', function() {
 }, false);
 
 function displayGameOverPage() {
+    console.log("display GameOverPage");
     displayBlock(config.gameOverPage);
-    config.gameOverPage.style.opacity = 1;
 }
 
-function displayNoneGameOverPage() {
+function gameOverToInitial() {
+    moveInitialPage();
     displayNone(config.gameOverPage);
-    config.gameOverPage.style.opacity = 0;
+}
+
+function playAgain() {
+    gameStart();
+    displayNone(config.gameOverPage);
 }
 
 document.onkeydown = function(e) {
@@ -813,7 +836,6 @@ function drawTitle(targetContext ,blockSize) {
                 let [r, g, b] = titleColor[titleTetro[y][x]];
                 targetContext.fillStyle = `rgba(${r}, ${g}, ${b})`;
                 targetContext.fillRect(x * blockSize, y * blockSize, blockSize, blockSize);
-                // targetContext.strokeStyle = `rgba(0, 0, 0, 1)`;
                 targetContext.strokeRect(x * blockSize, y * blockSize, blockSize, blockSize);
                 targetContext.fillStyle = `rgba(0, 0, 0, 0.2)`;
                 targetContext.fillRect(x * blockSize + 5, y * blockSize + 5, blockSize, blockSize);
